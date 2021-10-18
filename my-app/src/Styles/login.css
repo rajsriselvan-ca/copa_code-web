@@ -1,0 +1,43 @@
+@import '~antd/dist/antd.css';
+
+.login-outline {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+.login-background {
+    margin-top: 10%;
+}
+.login-frame {
+    border-radius: 9px;
+    box-shadow: 0 0 30px #636f80;
+}
+.email-field {
+    width: 90%;
+    color: #26afeb;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #636f80;
+}
+.password-field {
+    width: 90%;
+    color: #26afeb;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #636f80;
+}
+.inner-box {
+    margin-top: 10%;
+    margin-left: 10%;
+}
+.login-header {
+    color: #636f80;
+    text-align: center;
+    align-items: center;
+    font-size: large;
+    margin-bottom: 30%;
+}
+.login-form-button {
+    margin-left: 32%;
+    color: white;
+    background-color: #26afeb;
+    box-shadow: 0 0 5px #636f80;
+}
