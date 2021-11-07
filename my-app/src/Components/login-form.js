@@ -3,10 +3,19 @@ import { Form, Input, Button, Checkbox, Card } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import Helmet from 'react-helmet';
 import '../Styles/login.css';
+import { registerLogin } from '../Api/login';
 
 function Login() {
+    const [registerUser, setRegisterUser ] = useState();
+    const [registerPassword, setRegisterPassword ] = useState();
+
     const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+        // console.log('Received values of form: ', values);
+        const registerPayload = {
+            username: registerUser,
+            password: registerPassword
+        };
+        registerLogin(registerPayload);
     };
     return (
         <div className="login-outline">
@@ -23,7 +32,7 @@ function Login() {
                         onFinish={onFinish}
                     >
                         <div className="inner-box">
-                            <span className="login-header"><b>Login</b></span>
+                            <span className="login-header"><b>Sign Up</b></span>
                             <div>
                                 <Form.Item
                                     name="username"
@@ -35,7 +44,7 @@ function Login() {
                                         },
                                     ]}
                                 >
-                                    <Input className="email-field" size="large" prefix={<MailOutlined style={{ fontSize: '20px' }} className="site-form-item-icon" />} placeholder="Email" />
+                                    <Input className="email-field" onChange={(event) => setRegisterUser(event.target.value)} size="large" prefix={<MailOutlined style={{ fontSize: '20px' }} className="site-form-item-icon" />} placeholder="Email" />
                                 </Form.Item>
                                 <Form.Item
                                     name="password"
@@ -48,6 +57,7 @@ function Login() {
                                 >
                                     <Input
                                         className="password-field"
+                                        onChange={(event) => setRegisterPassword(event.target.value)}
                                         size="large"
                                         prefix={<LockOutlined style={{ fontSize: '20px' }} className="site-form-item-icon" />}
                                         type="password"
@@ -56,7 +66,7 @@ function Login() {
                                 </Form.Item>
                                 <Form.Item>
                                     <Button type="primary" htmlType="submit" className="login-form-button">
-                                        Log in
+                                        Register
                                     </Button>
                                 </Form.Item>
                             </div>
