@@ -4,16 +4,20 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import Helmet from 'react-helmet';
 import '../Styles/login.css';
 import { registerLogin } from '../Api/login';
+import moment from "moment";
+
 
 function Login() {
     const [registerUser, setRegisterUser ] = useState();
     const [registerPassword, setRegisterPassword ] = useState();
 
-    const onFinish = (values) => {
-        // console.log('Received values of form: ', values);
+    const onFinish = () => {
+        const currentDate = moment().format("DD-MM-YYYY hh:mm A")
+        console.log('Received values of form: ',currentDate );
         const registerPayload = {
             username: registerUser,
-            password: registerPassword
+            password: registerPassword,
+            submission_date: currentDate
         };
         registerLogin(registerPayload);
     };
