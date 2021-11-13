@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Checkbox, Card } from 'antd';
+import { Form, Input, Button, notification, Card } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import Helmet from 'react-helmet';
 import '../Styles/login.css';
 import { registerLogin } from '../Api/login';
 import moment from "moment";
+import { notificationContent } from '../Shared Files/notification';
 
 
 function Login() {
@@ -19,7 +20,10 @@ function Login() {
             password: registerPassword,
             submission_date: currentDate
         };
-        registerLogin(registerPayload);
+        registerLogin(registerPayload).then((response) => {
+            const status = response.data;
+            notificationContent(status, "Registration");
+        });
     };
     return (
         <div className="login-outline">
