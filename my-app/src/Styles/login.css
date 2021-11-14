@@ -42,3 +42,8 @@
     background-color: #26afeb;
     box-shadow: 0 0 5px #636f80;
 }
+.register-back-button {
+    /* margin-left: 50px; */
+    margin-left: 70%;
+    cursor: pointer;
+}
