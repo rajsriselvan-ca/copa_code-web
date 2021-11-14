@@ -9,7 +9,12 @@ export const notificationContent = (type, code) => {
     } else if(code === "Login") {
         notification[type]({
             message: type,
-            description: type === 'success' ?  "User Sucessfully Login !!" : "User Failed to Login",
+            description: type === 'success' ?  "User Sucessfully Login !!" : "User Failed to Login, Please check the credentials",
           });
+    } else if(code === "UserExist") {
+        notification[type]({
+            message: type,
+            description: "User already exist, Please try with different Email ID !!",
+        })
     }
 }

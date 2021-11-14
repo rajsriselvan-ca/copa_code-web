@@ -6,12 +6,14 @@ import '../Styles/login.css';
 import { registerLogin, getUsers } from '../Api/login';
 import moment from "moment";
 import { notificationContent } from '../Shared Files/notification';
+import _ from 'lodash';
 
 
 function Login() {
     const [registerUser, setRegisterUser] = useState();
     const [registerPassword, setRegisterPassword] = useState();
     const [formType, setFormType] = useState("User-Login");
+    const [form] = Form.useForm();
 
     const onFinish = () => {
         const formCode = formType;
@@ -27,17 +29,26 @@ function Login() {
             });
         }
         else if (formCode === "User-Registration") {
-            const currentDate = moment().format("DD-MM-YYYY hh:mm A")
-            const registerPayload = {
-                username: registerUser,
-                password: registerPassword,
-                submission_date: currentDate
-            };
-            registerLogin(registerPayload).then((response) => {
-                const status = response.data;
-                if (status === "success") setFormType("User-Login");
-                notificationContent(status, "Registration");
+            getUsers().then(response => {
+                const userData = response.data;
+                const userExist = userData.find(record => record.user_name === registerUser) === undefined ? false : true;
+                if (userExist) {
+                    return notificationContent("warning", "UserExist")
+                } else {
+                    const currentDate = moment().format("DD-MM-YYYY hh:mm A");
+                    const registerPayload = {
+                        username: registerUser,
+                        password: registerPassword,
+                        submission_date: currentDate
+                    };
+                    registerLogin(registerPayload).then((response) => {
+                        const status = response.data;
+                        if (status === "success") setFormType("User-Login")
+                        notificationContent(status, "Registration");
+                    });
+                }
             });
+            form.resetFields();
         }
     };
     return (
@@ -50,6 +61,7 @@ function Login() {
                         name="normal_login"
                         className="login-form"
                         onFinish={onFinish}
+                        form={form}
                         initialValues={{
                             remember: true,
                         }}
