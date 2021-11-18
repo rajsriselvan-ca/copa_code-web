@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Tabs, Card, Spin } from 'antd';
+import { Form, Input, Button, Card } from 'antd';
+import { useHistory } from "react-router-dom";
 import { MailOutlined, LockOutlined, RightCircleFilled, LeftCircleFilled } from '@ant-design/icons';
 import Helmet from 'react-helmet';
 import '../Styles/login.css';
 import { registerLogin, getUsers } from '../Api/login';
 import moment from "moment";
 import { notificationContent } from '../Shared Files/notification';
-import _ from 'lodash';
-
 
 function Login() {
+    let history = useHistory();
     const [registerUser, setRegisterUser] = useState();
     const [registerPassword, setRegisterPassword] = useState();
     const [formType, setFormType] = useState("User-Login");
@@ -19,12 +19,12 @@ function Login() {
         const formCode = formType;
         if (formCode === "User-Login") {
             getUsers().then(response => {
-                const status = response.data;
                 const checkTheUser = response.data.filter(e => e.user_name === registerUser && e.user_password === registerPassword);
                 if (checkTheUser.length === 0) {
                     return notificationContent("error", "Login");
                 } else {
-                    return notificationContent("success", "Login");
+                    notificationContent("success", "Login");
+                    history.push('/dashboard');
                 }
             });
         }
