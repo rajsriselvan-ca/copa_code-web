@@ -43,6 +43,12 @@
   border-radius: 12px;
   cursor: pointer;
 }
+.cards:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.search-bar:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
 .cards-container {
   width: 20%;
   height: 60%;

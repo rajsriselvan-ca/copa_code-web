@@ -16,14 +16,12 @@
     width: 90%;
     color: #26afeb;
     border-radius: 5px;
-    box-shadow: 0 0 5px #636f80;
 }
 
 .password-field {
     width: 90%;
     color: #26afeb;
     border-radius: 5px;
-    box-shadow: 0 0 5px #636f80;
 }
 .inner-box {
     margin-top: 10%;
@@ -43,7 +41,15 @@
     box-shadow: 0 0 5px #636f80;
 }
 .register-back-button {
-    /* margin-left: 50px; */
     margin-left: 70%;
     cursor: pointer;
+}
+.login-form-button:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.email-field:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.password-field:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }

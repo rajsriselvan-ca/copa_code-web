@@ -39,11 +39,11 @@ function ProjectDashBoard() {
                     </div>
                     <div className="slate-board" >
                         {lis.map(record => (
-                            <span className="cards-container">
+                            <div className="cards-container">
                                 <Card title="Card title" className="cards"  bordered={false}>
                                     Card content{record}
                                 </Card>
-                                </span>
+                                </div>
                         ))}
                     </div>
                 </div>
