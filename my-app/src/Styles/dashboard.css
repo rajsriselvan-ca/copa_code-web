@@ -47,7 +47,7 @@
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 .search-bar:hover {
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 .cards-container {
   width: 20%;
@@ -70,4 +70,12 @@
   color: rgba(255, 255, 255, 0.65);
   text-align: center;
   background-color: #001529;
+}
+.add-button {
+    background-color: #26afeb;
+    border-color: #26afeb;
+    margin-left: 1%;
+}
+.add-button:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
