@@ -7,3 +7,6 @@ export const getNotesType = () => {
 export const getProgramLanguage = () => {
     return Axios.get(`${configData.SERVER_URL}/${'dashboard/get-program-language'}`);
  }
+export const createNotes = (payload) => {
+    return Axios.post(`${configData.SERVER_URL}/${'dashboard/create-notes'}`, payload);
+}

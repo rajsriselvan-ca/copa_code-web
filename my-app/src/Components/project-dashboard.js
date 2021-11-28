@@ -13,10 +13,12 @@ function ProjectDashBoard() {
     const [getNotesCategory, setNotesCategory] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    useEffect(async () => {
-        await getNotesType().then(response => {
-            setNotesCategory(response.data);
-        })
+    useEffect(() => {
+        const fetchData = async () => {
+            const incomingNotesType = await getNotesType();
+            setNotesCategory(incomingNotesType.data);
+        }
+        fetchData();
     }, []);
 
     const showModal = () => {
@@ -36,11 +38,11 @@ function ProjectDashBoard() {
         <Layout className="dashboard-container">
             <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
                 <div className="user-logo" style={{ color: "white" }}>Raju Pattu</div>
-                <Menu theme="dark" color="red" mode="horizontal" defaultSelectedKeys={['1']}>
-                    {getNotesCategory.map((data) => {
-                        return <Menu.Item key={data.notes_type_id}>{data.notes_type}</Menu.Item>;
-                    })}
-                </Menu>
+                {<Menu theme="dark" color="red" mode="horizontal" defaultSelectedKeys={['1']}>
+                    {getNotesCategory.map((data) => (
+                         <Menu.Item key={data.notes_type_id}>{data.notes_type}</Menu.Item>
+                    ))}
+                </Menu>}
             </Header>
             <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
                 <div className="site-layout-background" style={{ minHeight: 380 }}>
@@ -50,9 +52,9 @@ function ProjectDashBoard() {
                    <Button type="primary" className="add-button" onClick={showModal} icon={<PlusOutlined />} size={"middle"} />
                     </div>
                     <div className="slate-board" >
-                        {lis.map(record => (
-                            <div className="cards-container">
-                                <Card title="Card title" className="cards"  bordered={false}>
+                        {lis.map((record, index) => (
+                            <div className="cards-container" key={index}>
+                                <Card title="Card title" key={index} className="cards"  bordered={false}>
                                     Card content{record}
                                 </Card>
                                 </div>
@@ -60,7 +62,7 @@ function ProjectDashBoard() {
                     </div>
                 </div>
             </Content>
-            <FormDetails data={isModalVisible} cancel={onCancel} />
+             <FormDetails data={isModalVisible} cancel={onCancel} />
             <span className="footer"><small>Created by Raj Sri Selvan</small></span>
         </Layout>
     )
