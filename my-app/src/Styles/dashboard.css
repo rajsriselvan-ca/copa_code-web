@@ -1,6 +1,6 @@
 
 .dashboard-container{
-  height: 569px;
+  height: 100vh;
 }
 .site-layout-content {
   padding: 24px;
@@ -35,7 +35,7 @@
   flex-wrap: wrap;
   overflow: scroll;
   overflow-x: hidden;
-  height: 434px;
+  height: 77vh;
 }
 .cards {
   height: 80%;
@@ -51,7 +51,7 @@
 }
 .cards-container {
   width: 20%;
-  height: 60%;
+  height: 50%;
 }
 ::-webkit-scrollbar {
   width: 15px;
@@ -78,4 +78,5 @@
 }
 .add-button:hover {
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  background-color: #26afeb;
 }

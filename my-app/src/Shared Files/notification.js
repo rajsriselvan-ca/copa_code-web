@@ -16,5 +16,10 @@ export const notificationContent = (type, code) => {
             message: type,
             description: "User already exist, Please try with different Email ID !!",
         })
-    }
+    } else if(code === "NoteSubmit") {
+        notification[type]({
+            message: type,
+            description: type === 'success' ?  "Your Notes Sucessfully Submitted !!" : "Failed to Submit Your Notes",
+          });
+    } 
 }
