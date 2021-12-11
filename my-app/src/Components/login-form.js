@@ -108,7 +108,8 @@ function Login() {
                                     onClick={(event) => {
                                         setFormType("User-Registration");
                                     }} style={{ color: "#26afeb", fontSize: "16px", cursor: "pointer" }} />}</div>) :
-                                    (<div className="register-back-button" onClick={event => setFormType("User-Login")}><LeftCircleFilled style={{ color: "#26afeb", fontSize: "20px", marginTop: "20px" }} />
+                                    (<div className="register-back-button" onClick={event => setFormType("User-Login")}>
+                                        <LeftCircleFilled style={{ color: "#26afeb", fontSize: "20px", marginTop: "20px" }} />
                                         <span style={{ color: "#636f80", fontSize: "18px" }}><b> Go Back</b></span></div>)}
                                 </div>
                             </div>

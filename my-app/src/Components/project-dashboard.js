@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Layout, Menu, Card, Input, Button } from 'antd';
+import { Layout, Menu, Card, Input, Button} from 'antd';
 import {PlusOutlined }from '@ant-design/icons';
+import "bootstrap-icons/font/bootstrap-icons.css";
 import '../Styles/dashboard.css';
 import { getNotesType, getNotes } from '../Api/dashboard';
 import FormDetails from "../Components/modal";
@@ -13,6 +14,7 @@ function ProjectDashBoard() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedTab, setSelectedTab] = useState('1');
     const [noteList, setNoteList] = useState([]);
+    const [showIcon, setIcon] = useState([]);
 
 
     useEffect(() => {
@@ -21,11 +23,30 @@ function ProjectDashBoard() {
             setNotesCategory(incomingNotesType.data);
             const incomingNotes = await getNotes(selectedTab);
             setNoteList(incomingNotes.data)
+            setIcon(<i className="bi bi-file-earmark-code"></i>);
         }
         fetchData();
     }, []);
 
+    function setCardsIcon (key) {
+        switch (key) {
+            case "1" :
+                return setIcon(<i className="bi bi-file-earmark-code"></i>);
+            case "2" : 
+                return setIcon(<i className="bi bi-stack"></i>);
+            case "3" : 
+                return setIcon(<i className="bi bi-github"></i>);
+            case "4" : 
+                return setIcon(<i className="bi bi-cloud"></i>);
+            case "5" : 
+                return setIcon(<i className="bi bi-clipboard-check"></i>);
+            case "6" : 
+                return setIcon(<i className="bi bi-file-text"></i>);
+        }
+    }
+
     const handleTabSelection = async (key) => {
+      setCardsIcon(key);
       const incomingNotes = await getNotes(key);
       setSelectedTab(key);
       setNoteList(incomingNotes.data);
@@ -61,9 +82,12 @@ function ProjectDashBoard() {
                     <div className="slate-board" >
                         {noteList.map((record, index) => (
                             <div className="cards-container" key={index}>
-                                <Card title={record.note_title} key={index} className="cards"  bordered={false}>
-                                     <p>Content : {record.content}</p>
+                                <Card key={index} className="cards"  bordered={false}>
+                                    <div><span>{showIcon}</span>
+                                    <span className="title-frame"><p><b>{record.note_title}</b></p></span></div>
+                                    <div className="description-frame"><p className="card-description">{record.content}</p></div>
                                 </Card>
+                                <div className="delete-component"><i className="bi bi bi-trash"></i></div>
                                 </div>
                         ))}
                     </div>
