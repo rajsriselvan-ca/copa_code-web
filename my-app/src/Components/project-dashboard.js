@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Layout, Menu, Card, Input, Button} from 'antd';
 import {PlusOutlined }from '@ant-design/icons';
+import { notificationContent } from "../Shared Files/notification";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import '../Styles/dashboard.css';
-import { getNotesType, getNotes } from '../Api/dashboard';
+import { getNotesType, getNotes, deleteNote } from '../Api/dashboard';
 import FormDetails from "../Components/modal";
 
 const { Header, Content } = Layout;
@@ -14,17 +15,16 @@ function ProjectDashBoard() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedTab, setSelectedTab] = useState('1');
     const [noteList, setNoteList] = useState([]);
-    const [showIcon, setIcon] = useState([]);
+    const [showIcon, setIcon] = useState(<i className="bi bi-file-earmark-code"></i>);
 
+    const fetchData = async () => {
+        const incomingNotesType = await getNotesType();
+        setNotesCategory(incomingNotesType.data);
+        const incomingNotes = await getNotes(selectedTab);
+        setNoteList(incomingNotes.data)
+    }
 
     useEffect(() => {
-        const fetchData = async () => {
-            const incomingNotesType = await getNotesType();
-            setNotesCategory(incomingNotesType.data);
-            const incomingNotes = await getNotes(selectedTab);
-            setNoteList(incomingNotes.data)
-            setIcon(<i className="bi bi-file-earmark-code"></i>);
-        }
         fetchData();
     }, []);
 
@@ -60,6 +60,15 @@ function ProjectDashBoard() {
         setIsModalVisible(status);
     }
 
+    const handleDelete = async (record) => {
+        const id = record.note_id;
+        await deleteNote(id).then(response => {
+            if(response.data == "success") return notificationContent(response.data, "deleteConfirmation");
+            else return notificationContent(response.data, "deleteConfirmation");
+        });
+        fetchData();
+    }
+
     const onSearch = value => console.log(value);
 
     return (
@@ -81,19 +90,19 @@ function ProjectDashBoard() {
                     </div>
                     <div className="slate-board" >
                         {noteList.map((record, index) => (
-                            <div className="cards-container" key={index}>
+                            <span className="cards-container" key={index}>
                                 <Card key={index} className="cards"  bordered={false}>
                                     <div><span>{showIcon}</span>
                                     <span className="title-frame"><p><b>{record.note_title}</b></p></span></div>
                                     <div className="description-frame"><p className="card-description">{record.content}</p></div>
                                 </Card>
-                                <div className="delete-component"><i className="bi bi bi-trash"></i></div>
-                                </div>
+                                <div className="delete-component" onClick={event => handleDelete(record)}><i className="bi bi bi-trash"></i></div>
+                                </span>
                         ))}
                     </div>
                 </div>
             </Content>
-             <FormDetails data={isModalVisible} cancel={onCancel} />
+             <FormDetails visiblity={isModalVisible} data={fetchData} cancel={onCancel} />
             <span className="footer"><small>Created by Raj Sri Selvan</small></span>
         </Layout>
     )

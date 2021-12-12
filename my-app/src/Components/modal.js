@@ -7,7 +7,6 @@ import { notificationContent } from "../Shared Files/notification";
 
 const { Option } = Select;
 const { TextArea } = Input;
-// visible={isModalVisible}
 
 function FormDetails(props) {
     const [form] = Form.useForm();
@@ -65,6 +64,7 @@ function FormDetails(props) {
                 form.resetFields();
                 clearFormValues();
                 props.cancel(false);
+                props.data();
             } 
             else return notificationContent("error", "NoteSubmit");
         });
@@ -77,7 +77,7 @@ function FormDetails(props) {
                 cancelButtonProps={{ style: { display: 'none' } }}
                 closable={false}
                 footer={false}
-                visible={props.data}  >
+                visible={props.visiblity}  >
                 <Form
                     className="notes-form"
                     form={form}

@@ -21,5 +21,10 @@ export const notificationContent = (type, code) => {
             message: type,
             description: type === 'success' ?  "Your Notes Sucessfully Submitted !!" : "Failed to Submit Your Notes",
           });
+    } else if(code === "deleteConfirmation") {
+        notification[type]({
+            message: type,
+            description: type === 'success' ?  "Your Notes Deleted Successfully!!" : "Failed to Delete Your Notes",
+          });
     } 
 }
