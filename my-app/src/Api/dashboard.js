@@ -16,3 +16,6 @@ export const createNotes = (payload) => {
 export const deleteNote = (id) => {
     return Axios.delete(`${configData.SERVER_URL}/${`dashboard/delete-note/${id}`}`);
  }
+ export const updateNote = (id, payload) => {
+    return Axios.put(`${configData.SERVER_URL}/${`dashboard/update-note/${id}`}`, payload);
+ }

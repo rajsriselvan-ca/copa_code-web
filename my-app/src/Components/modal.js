@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Input, Button, Card, Modal, Select, Row, Col } from 'antd';
+import { Form, Input, Button, Modal, Select, Row, Col } from 'antd';
 import "../Styles/modal.css"
-import { getNotesType, getProgramLanguage, createNotes } from "../Api/dashboard";
+import { getNotesType, getProgramLanguage, createNotes, updateNote } from "../Api/dashboard";
 import moment from "moment";
 import { notificationContent } from "../Shared Files/notification";
 
@@ -10,20 +10,31 @@ const { TextArea } = Input;
 
 function FormDetails(props) {
     const [form] = Form.useForm();
+    const [editForm, setEditForm] = useState(false);
     const [getCategory, setCategory] = useState([]);
     const [getProgramType, setProgramType] = useState([]);
     const [selectedTitle, setSelectedTitle] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState([]);
     const [selectedProgram, setSelectedProgram] = useState([]);
     const [selectedContent, setSelectedContent] = useState([]);
-
+    const [noteId, setNoteId] = useState([]);
+    const editValue = props.edit;
 
     useEffect(() => {
         const fetchData = async () => {
             const incomingCategory = await getNotesType();
-            const incomingLanguage = await getProgramLanguage();
-            setCategory(incomingCategory.data);
-            setProgramType(incomingLanguage.data);
+                const incomingLanguage = await getProgramLanguage();
+                setCategory(incomingCategory.data);
+                setProgramType(incomingLanguage.data);
+            const checkEditValue = editValue.hasOwnProperty('note_id');
+            if(checkEditValue) {
+                setSelectedTitle(editValue.note_title);
+                setSelectedCategory(editValue.note_type_id);
+                setSelectedProgram(editValue.program_id);
+                setSelectedContent(editValue.content);
+                setNoteId(editValue.note_id);
+                setEditForm(true);
+            }
         }
         fetchData();
     }, []);
@@ -39,6 +50,7 @@ function FormDetails(props) {
     const handleCancel = () => {
         form.resetFields();
         clearFormValues();
+        setEditForm(false);
         props.cancel(false);
     }
 
@@ -58,16 +70,30 @@ function FormDetails(props) {
             content: selectedContent,
             submission_date: currentDate
         }
-        createNotes(payload).then((response) => {
-            if (response.data === "success") {
-                notificationContent(response.data, "NoteSubmit");
-                form.resetFields();
-                clearFormValues();
-                props.cancel(false);
-                props.data();
-            } 
-            else return notificationContent("error", "NoteSubmit");
-        });
+        if(editForm) {
+            updateNote(noteId, payload).then(response => {
+                if (response.data === "success") {
+                    notificationContent(response.data, "NoteSubmit");
+                    form.resetFields();
+                    clearFormValues();
+                    props.cancel(false);
+                    setEditForm(false);
+                    props.gridData();
+                } 
+                else return notificationContent("error", "NoteSubmit");
+            })
+        } else {
+            createNotes(payload).then((response) => {
+                if (response.data === "success") {
+                    notificationContent(response.data, "NoteSubmit");
+                    form.resetFields();
+                    clearFormValues();
+                    props.cancel(false);
+                    props.gridData();
+                } 
+                else return notificationContent("error", "NoteSubmit");
+            });
+        }
     }
 
     return (
@@ -77,12 +103,16 @@ function FormDetails(props) {
                 cancelButtonProps={{ style: { display: 'none' } }}
                 closable={false}
                 footer={false}
-                visible={props.visiblity}  >
+                visible={props.visiblity} >
                 <Form
                     className="notes-form"
                     form={form}
                     initialValues={{
                         remember: true,
+                        Category : editValue.note_type_id,
+                        Language : editValue.program_id,
+                        Title: editValue.note_title,
+                        Content: editValue.content,
                     }}
                 >
                     <div className="inner-frame" >
@@ -178,7 +208,7 @@ function FormDetails(props) {
                             Close
                         </Button>
                         <Button type="primary" className="note-submit" htmlType="submit" onClick={handleOk}>
-                            Submit
+                            {editForm ? "Update" : "Submit"}
                         </Button>
                     </Form.Item>
                 </Form>

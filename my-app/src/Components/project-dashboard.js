@@ -15,6 +15,7 @@ function ProjectDashBoard() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedTab, setSelectedTab] = useState('1');
     const [noteList, setNoteList] = useState([]);
+    const [editContent, setEditContent] = useState([]);
     const [showIcon, setIcon] = useState(<i className="bi bi-file-earmark-code"></i>);
 
     const fetchData = async () => {
@@ -52,12 +53,19 @@ function ProjectDashBoard() {
       setNoteList(incomingNotes.data);
     }
 
-    const showModal = () => {
-        setIsModalVisible(true);
-      };
+    const showModal = (code, record) => {
+        if(code === "create") {
+            setIsModalVisible(true);
+        } 
+        else if (code === "edit") {
+            setEditContent(record);
+            setIsModalVisible(true);
+        }
+      }
 
       const onCancel = (status) => {
         setIsModalVisible(status);
+        setEditContent([]);
     }
 
     const handleDelete = async (record) => {
@@ -86,12 +94,12 @@ function ProjectDashBoard() {
                     <div className="search-container">
                     <Search placeholder="Search Your Notes here.." className="search-bar"
                      enterButton={false} allowClear onSearch={onSearch} />
-                   <Button type="primary" className="add-button" onClick={showModal} icon={<PlusOutlined />} size={"middle"} />
+                   <Button type="primary" className="add-button" onClick={event => showModal("create")} icon={<PlusOutlined />} size={"middle"} />
                     </div>
                     <div className="slate-board" >
                         {noteList.map((record, index) => (
                             <span className="cards-container" key={index}>
-                                <Card key={index} className="cards"  bordered={false}>
+                                <Card key={index} className="cards" onClick={event => showModal("edit", record)}  bordered={false}>
                                     <div><span>{showIcon}</span>
                                     <span className="title-frame"><p><b>{record.note_title}</b></p></span></div>
                                     <div className="description-frame"><p className="card-description">{record.content}</p></div>
@@ -102,7 +110,7 @@ function ProjectDashBoard() {
                     </div>
                 </div>
             </Content>
-             <FormDetails visiblity={isModalVisible} data={fetchData} cancel={onCancel} />
+            {isModalVisible && <FormDetails visiblity={isModalVisible} gridData={fetchData} edit={editContent} cancel={onCancel} />} 
             <span className="footer"><small>Created by Raj Sri Selvan</small></span>
         </Layout>
     )
