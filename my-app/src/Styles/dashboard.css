@@ -49,7 +49,7 @@
 }
 .cards:hover {
   transform: scale(1.1);
-  border: solid 1.5px #26afeb;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 .search-bar:hover {
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
@@ -94,7 +94,7 @@
 }
 .bi-trash {
   font-size: 14px;
-  color: #D2042D;
+  color: #FA1754;
 }
 .card-description {
   font-size: 10px;
@@ -121,4 +121,13 @@
 .delete-component:hover {
   transform: scale(1.2);
 }
-
+.empty-list-message {
+  font-size: medium;
+  color: #001529;
+  align-self: center;
+  position: relative;
+  left: 43%;
+}
+.bi-x-circle-fill {
+  color: #FA1754;
+}

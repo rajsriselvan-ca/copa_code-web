@@ -4,7 +4,7 @@ import {PlusOutlined }from '@ant-design/icons';
 import { notificationContent } from "../Shared Files/notification";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import '../Styles/dashboard.css';
-import { getNotesType, getNotes, deleteNote } from '../Api/dashboard';
+import { getNotesType, getNotes, getAllNotes, deleteNote } from '../Api/dashboard';
 import FormDetails from "../Components/modal";
 
 const { Header, Content } = Layout;
@@ -15,7 +15,10 @@ function ProjectDashBoard() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedTab, setSelectedTab] = useState('1');
     const [noteList, setNoteList] = useState([]);
+    const [allNotesList, setEntireNotesList] = useState([]);
     const [editContent, setEditContent] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchResult, setSearchResult] = useState([]);
     const [showIcon, setIcon] = useState(<i className="bi bi-file-earmark-code"></i>);
 
     const fetchData = async () => {
@@ -23,6 +26,8 @@ function ProjectDashBoard() {
         setNotesCategory(incomingNotesType.data);
         const incomingNotes = await getNotes(selectedTab);
         setNoteList(incomingNotes.data)
+        const incomingEntireNotes = await getAllNotes();
+        setEntireNotesList(incomingEntireNotes.data);
     }
 
     useEffect(() => {
@@ -77,7 +82,17 @@ function ProjectDashBoard() {
         fetchData();
     }
 
-    const onSearch = value => console.log(value);
+    const searchHandler = (value) => {
+        setSearchTerm(value);
+        if(value !== "") {
+            const newList = allNotesList.filter(record => {
+                return Object.values(record).join(" ").toLowerCase().includes(value.toLowerCase());
+            });
+            setSearchResult(newList);
+        } else {
+            setSearchResult(noteList);
+        }
+    }
 
     return (
         <Layout className="dashboard-container">
@@ -93,11 +108,20 @@ function ProjectDashBoard() {
                 <div className="site-layout-background" style={{ minHeight: 380 }}>
                     <div className="search-container">
                     <Search placeholder="Search Your Notes here.." className="search-bar"
-                     enterButton={false} allowClear onSearch={onSearch} />
+                     enterButton={false} allowClear  onChange={event => searchHandler(event.target.value)} />
                    <Button type="primary" className="add-button" onClick={event => showModal("create")} icon={<PlusOutlined />} size={"middle"} />
                     </div>
                     <div className="slate-board" >
-                        {noteList.map((record, index) => (
+                    { searchTerm.length > 1 ? searchResult.map((record, index) => (
+                            <span className="cards-container" key={index}>
+                                <Card key={index} className="cards" onClick={event => showModal("edit", record)}  bordered={false}>
+                                    <div><span>{showIcon}</span>
+                                    <span className="title-frame"><p><b>{record.note_title}</b></p></span></div>
+                                    <div className="description-frame"><p className="card-description">{record.content}</p></div>
+                                </Card>
+                                <div className="delete-component" onClick={event => handleDelete(record)}><i className="bi bi bi-trash"></i></div>
+                                </span>
+                        )) : noteList.map((record, index) => (
                             <span className="cards-container" key={index}>
                                 <Card key={index} className="cards" onClick={event => showModal("edit", record)}  bordered={false}>
                                     <div><span>{showIcon}</span>
