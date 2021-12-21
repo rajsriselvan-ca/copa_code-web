@@ -19,7 +19,7 @@ function Login() {
         const formCode = formType;
         if (formCode === "User-Login") {
             getUsers().then(response => {
-                const checkTheUser = response.data.filter(e => e.user_name === registerUser && e.user_password === registerPassword);
+                const checkTheUser = response.data.filter(e => e.user_name.toLowerCase() === registerUser.toLowerCase() && e.user_password.toLowerCase() === registerPassword.toLowerCase());
                 if (checkTheUser.length === 0) {
                     return notificationContent("error", "Login");
                 } else {
@@ -104,13 +104,13 @@ function Login() {
                                         {formType !== "User-Login" ? "Register" : "Login"}
                                     </Button>
                                 </Form.Item>
-                                <div>{formType === "User-Login" ? (<div>Are you a new user ? Please register here {<RightCircleFilled
-                                    onClick={(event) => {
+                                <div>{formType === "User-Login" ? (<div className='new-user-question' onClick={(event) => {
                                         setFormType("User-Registration");
-                                    }} style={{ color: "#26afeb", fontSize: "16px", cursor: "pointer" }} />}</div>) :
+                                    }} >Are you a new user ? Please register here {<RightCircleFilled
+                                     style={{ color: "#808080", fontSize: "16px", cursor: "pointer" }} />}</div>) :
                                     (<div className="register-back-button" onClick={event => setFormType("User-Login")}>
-                                        <LeftCircleFilled style={{ color: "#26afeb", fontSize: "20px", marginTop: "20px" }} />
-                                        <span style={{ color: "#636f80", fontSize: "18px" }}><b> Go Back</b></span></div>)}
+                                        <LeftCircleFilled style={{ color: "#808080", fontSize: "20px", marginTop: "20px" }} />
+                                        <span style={{ color: "#636f80", fontSize: "18px" }}><span className="go-back"> Go Back</span></span></div>)}
                                 </div>
                             </div>
                         </div>

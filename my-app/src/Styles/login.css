@@ -53,3 +53,11 @@
 .password-field:hover {
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
+.new-user-question:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+    color: #FF4500;
+}
+.register-back-button:hover {
+    transform: scale(1.1);
+}
