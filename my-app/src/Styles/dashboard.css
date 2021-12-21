@@ -132,3 +132,14 @@
 .bi-x-circle-fill {
   color: #FA1754;
 }
+.bi-person-circle {
+  font-size: 22px;
+  color: white;
+  cursor: pointer;
+}
+.user-name {
+  position: relative;
+  left: 6px;
+  bottom: 4px;
+  cursor: pointer;
+}

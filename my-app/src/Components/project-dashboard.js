@@ -19,14 +19,20 @@ function ProjectDashBoard() {
     const [editContent, setEditContent] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [searchResult, setSearchResult] = useState([]);
+    const [userName, setUserName] = useState("");
     const [showIcon, setIcon] = useState(<i className="bi bi-file-earmark-code"></i>);
 
     const fetchData = async () => {
+        const params = {
+            user_id : localStorage.getItem('userID'),
+            selectedTab : selectedTab,
+        }
+        setUserName(localStorage.getItem('userName'))
         const incomingNotesType = await getNotesType();
         setNotesCategory(incomingNotesType.data);
-        const incomingNotes = await getNotes(selectedTab);
+        const incomingNotes = await getNotes(params);
         setNoteList(incomingNotes.data)
-        const incomingEntireNotes = await getAllNotes();
+        const incomingEntireNotes = await getAllNotes(params);
         setEntireNotesList(incomingEntireNotes.data);
     }
 
@@ -52,8 +58,12 @@ function ProjectDashBoard() {
     }
 
     const handleTabSelection = async (key) => {
+        const params = {
+            user_id : localStorage.getItem('userID'),
+            selectedTab : key,
+        }
       setCardsIcon(key);
-      const incomingNotes = await getNotes(key);
+      const incomingNotes = await getNotes(params);
       setSelectedTab(key);
       setNoteList(incomingNotes.data);
     }
@@ -97,7 +107,8 @@ function ProjectDashBoard() {
     return (
         <Layout className="dashboard-container">
             <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
-                <div className="user-logo" style={{ color: "white" }}>Raju Pattu</div>
+                <div className="user-logo" style={{ color: "white" }}><span><i className="bi bi-person-circle"></i></span>
+                <span className="user-name">{userName}</span></div>
                 {<Menu theme="dark" color="red" mode="horizontal" defaultSelectedKeys={[selectedTab]}>
                     {getNotesCategory.map((data) => (
                          <Menu.Item key={data.notes_type_id} onClick={event => handleTabSelection(event.key)}>{data.notes_type}</Menu.Item>

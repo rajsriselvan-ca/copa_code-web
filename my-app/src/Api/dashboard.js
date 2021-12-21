@@ -7,11 +7,11 @@ export const getNotesType = () => {
 export const getProgramLanguage = () => {
     return Axios.get(`${configData.SERVER_URL}/${'dashboard/get-program-language'}`);
  }
- export const getNotes = (id) => {
-    return Axios.get(`${configData.SERVER_URL}/${`dashboard/get-notes/${id}`}`);
+ export const getNotes = (params) => {
+    return Axios.get(`${configData.SERVER_URL}/${`dashboard/get-notes/`}`, {params});
  }
- export const getAllNotes = () => {
-   return Axios.get(`${configData.SERVER_URL}/${`dashboard/get-all-notes/`}`);
+ export const getAllNotes = (params) => {
+   return Axios.get(`${configData.SERVER_URL}/${`dashboard/get-all-notes/`}`, {params});
 }
 export const createNotes = (payload) => {
     return Axios.post(`${configData.SERVER_URL}/${'dashboard/create-notes'}`, payload);
