@@ -26,7 +26,7 @@
 }
 .search-container{
   background-color: #d6d6d6;
-  padding: 6px;
+  padding: 5px;
   border-radius: 10px;
   }
 .search-bar {
@@ -42,8 +42,8 @@
   height: 77vh;
 }
 .cards {
-  height: 25vh;
-  margin: 10px;
+  height: 18vh;
+  margin: 8px;
   border-radius: 5px;
   cursor: pointer;
 }
@@ -56,7 +56,6 @@
 }
 .cards-container {
   width: 20%;
-  height: 10%;
 }
 ::-webkit-scrollbar {
   width: 15px;
@@ -98,6 +97,8 @@
 }
 .card-description {
   font-size: 10px;
+  height: 9vh;
+  margin-right: 25px;
 }
 .description-frame {
   display: block;
@@ -111,8 +112,8 @@
   display: block;
   text-overflow: ellipsis;
   overflow: hidden;
-  max-height: 2.6em;
-  line-height: 1.3em;
+  max-height: 1.6em;
+  line-height: 1.1em;
 }
 .delete-component {
   position:relative; float: right; top:-33px; right: 15px;
