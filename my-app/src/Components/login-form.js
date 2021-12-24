@@ -62,6 +62,7 @@ function Login() {
     };
     return (
         <div className="login-outline">
+            {/* <div><img src="%PUBLIC_URL%/logo192.png" width="150" height="100"/></div> */}
             <div className='login-background'>
                 <Helmet bodyAttributes={{ style: 'background-color : #26afeb' }} />
                 <Card size="small" className="login-frame"

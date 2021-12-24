@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { Layout, Menu, Card, Input, Button} from 'antd';
 import {PlusOutlined }from '@ant-design/icons';
+import { useHistory } from "react-router-dom";
 import { notificationContent } from "../Shared Files/notification";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import '../Styles/dashboard.css';
 import { getNotesType, getNotes, getAllNotes, deleteNote } from '../Api/dashboard';
+import { Nav, NavDropdown } from 'react-bootstrap';
 import FormDetails from "../Components/modal";
 
 const { Header, Content } = Layout;
 const { Search } = Input;
 
 function ProjectDashBoard() {
+    let history = useHistory();
     const [getNotesCategory, setNotesCategory] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedTab, setSelectedTab] = useState('1');
@@ -104,11 +107,19 @@ function ProjectDashBoard() {
         }
     }
 
+    const logoutHandler = () => {
+        localStorage.clear();
+        history.push('/');
+    }
+
     return (
         <Layout className="dashboard-container">
             <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+                <div className='logo-frame'>
                 <div className="user-logo" style={{ color: "white" }}><span><i className="bi bi-person-circle"></i></span>
                 <span className="user-name">{userName}</span></div>
+                <div className='logout-outer'><div className='logout-inner' onClick={logoutHandler}>Logout</div></div>
+                </div>
                 {<Menu theme="dark" color="red" mode="horizontal" defaultSelectedKeys={[selectedTab]}>
                     {getNotesCategory.map((data) => (
                          <Menu.Item key={data.notes_type_id} onClick={event => handleTabSelection(event.key)}>{data.notes_type}</Menu.Item>

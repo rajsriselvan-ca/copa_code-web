@@ -12,6 +12,31 @@
   float: left;
   margin-left: 1%;
 }
+.logo-frame:hover .logout-outer  {display: block;}
+.logout-outer {
+  display: none;
+  position: absolute;
+  top: 48px;
+  left: 56px;
+  height: 33px;
+  width: 88px;
+  background-color: #26afeb;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.logout-inner {
+  color: white;
+  position: relative;
+  bottom: 17px;
+  left: 20px;
+}
+.logout-outer:hover {
+  background-color:	#8fcfec;
+  color: black;
+}
+.logout-inner:hover {
+  color: black;
+}
 .ant-layout-header {
   padding: 0%;
 }
