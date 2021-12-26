@@ -112,6 +112,10 @@ function ProjectDashBoard() {
         history.push('/');
     }
 
+    const footerHandler = () => {
+        window.location.replace("http://www.linkedin.com/in/rajsriselvan");
+    }
+
     return (
         <Layout className="dashboard-container">
             <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
@@ -157,7 +161,7 @@ function ProjectDashBoard() {
                 </div>
             </Content>
             {isModalVisible && <FormDetails visiblity={isModalVisible} gridData={fetchData} edit={editContent} cancel={onCancel} />} 
-            <span className="footer"><small>Created by Raj Sri Selvan</small></span>
+            <span className="footer" onClick={footerHandler}><small>Created by Raj Sri Selvan</small></span>
         </Layout>
     )
 }

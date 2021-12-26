@@ -61,3 +61,6 @@
 .register-back-button:hover {
     transform: scale(1.1);
 }
+.footer {
+    cursor: pointer;
+}
