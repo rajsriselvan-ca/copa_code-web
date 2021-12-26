@@ -62,11 +62,10 @@ function Login() {
     };
     return (
         <div className="login-outline">
-            {/* <div><img src="%PUBLIC_URL%/logo192.png" width="150" height="100"/></div> */}
             <div className='login-background'>
                 <Helmet bodyAttributes={{ style: 'background-color : #26afeb' }} />
                 <Card size="small" className="login-frame"
-                    style={{ width: 400, height: 350 }}>
+                    style={{ width: 400, height: 392 }}>
                     <Form
                         name="normal_login"
                         className="login-form"
@@ -76,6 +75,7 @@ function Login() {
                             remember: true,
                         }}
                     >
+                        <img src="../app-logo.png" width="350" height="75"/>
                         <div className="inner-box">
                             <span className="login-header">{formType !== "User-Login" ? <b>Registration</b> : <b>Login</b>}</span>
                             <div>
