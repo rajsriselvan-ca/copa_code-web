@@ -4,13 +4,14 @@
     display: flex;
     align-content: center;
     justify-content: center;
+    height: 100vh;
+    background-image: url("../Shared Files/background-image.jpg");
 }
 .login-background {
     margin-top: 10%;
 }
 .login-frame {
     border-radius: 9px;
-    box-shadow: 0 0 30px #636f80;
 }
 .email-field {
     width: 90%;

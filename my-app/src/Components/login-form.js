@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Card } from 'antd';
 import { useHistory } from "react-router-dom";
 import { MailOutlined, LockOutlined, RightCircleFilled, LeftCircleFilled } from '@ant-design/icons';
-import Helmet from 'react-helmet';
 import '../Styles/login.css';
 import { registerLogin, getUsers } from '../Api/login';
 import moment from "moment";
@@ -63,7 +62,6 @@ function Login() {
     return (
         <div className="login-outline">
             <div className='login-background'>
-                <Helmet bodyAttributes={{ style: 'background-color : #26afeb' }} />
                 <Card size="small" className="login-frame"
                     style={{ width: 400, height: 392 }}>
                     <Form
