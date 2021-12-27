@@ -62,6 +62,7 @@
 .slate-board {
   display: flex;
   flex-wrap: wrap;
+  align-content: start;
   overflow: scroll;
   overflow-x: hidden;
   height: 77vh;

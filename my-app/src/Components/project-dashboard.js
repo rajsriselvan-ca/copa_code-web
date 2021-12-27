@@ -112,10 +112,6 @@ function ProjectDashBoard() {
         history.push('/');
     }
 
-    const footerHandler = () => {
-        window.location.replace("http://www.linkedin.com/in/rajsriselvan");
-    }
-
     return (
         <Layout className="dashboard-container">
             <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
@@ -139,29 +135,29 @@ function ProjectDashBoard() {
                     </div>
                     <div className="slate-board" >
                     { searchTerm.length > 1 ? searchResult.map((record, index) => (
-                            <span className="cards-container" key={index}>
+                            <div className="cards-container" key={index}>
                                 <Card key={index} className="cards" onClick={event => showModal("edit", record)}  bordered={false}>
                                     <div><span>{showIcon}</span>
                                     <span className="title-frame"><p><b>{record.note_title}</b></p></span></div>
                                     <div className="description-frame"><p className="card-description">{record.content}</p></div>
                                 </Card>
                                 <div className="delete-component" onClick={event => handleDelete(record)}><i className="bi bi bi-trash"></i></div>
-                                </span>
+                                </div>
                         )) : noteList.map((record, index) => (
-                            <span className="cards-container" key={index}>
+                            <div className="cards-container" key={index}>
                                 <Card key={index} className="cards" onClick={event => showModal("edit", record)}  bordered={false}>
                                     <div><span>{showIcon}</span>
                                     <span className="title-frame"><p><b>{record.note_title}</b></p></span></div>
                                     <div className="description-frame"><p className="card-description">{record.content}</p></div>
                                 </Card>
                                 <div className="delete-component" onClick={event => handleDelete(record)}><i className="bi bi bi-trash"></i></div>
-                                </span>
+                                </div>
                         ))}
                     </div>
                 </div>
             </Content>
             {isModalVisible && <FormDetails visiblity={isModalVisible} gridData={fetchData} edit={editContent} cancel={onCancel} />} 
-            <span className="footer" onClick={footerHandler}><small>Created by Raj Sri Selvan</small></span>
+            <a className="footer" target='_blank' href='http://www.linkedin.com/in/rajsriselvan'><small>Created by Raj Sri Selvan</small></a>
         </Layout>
     )
 }

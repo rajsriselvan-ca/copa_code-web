@@ -15,7 +15,7 @@ function FormDetails(props) {
     const [getProgramType, setProgramType] = useState([]);
     const [selectedTitle, setSelectedTitle] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState([]);
-    const [selectedProgram, setSelectedProgram] = useState([]);
+    const [selectedProgram, setSelectedProgram] = useState(0);
     const [selectedContent, setSelectedContent] = useState([]);
     const [noteId, setNoteId] = useState([]);
     const editValue = props.edit;
@@ -98,7 +98,7 @@ function FormDetails(props) {
     }
 
     return (
-            <Modal title="Create Notes" className="popup-frame" 
+            <Modal title={editForm ? "Update Notes" : "Create Notes"} className="popup-frame" 
                 width="49rem"
                 okButtonProps={{ style: { display: 'none' } }}
                 cancelButtonProps={{ style: { display: 'none' } }}
@@ -163,13 +163,15 @@ function FormDetails(props) {
                                 </Form.Item>
                             </Col>
                         </Row>
-                        <Row>
+                        {
+                            editValue.program_id  !== 0 ? 
+                            <Row>
                             <Form.Item
                                 name="Language"
                                 label="Language"
                                 rules={[
                                     {
-                                        required: true,
+                                        required: false,
                                     },
                                 ]}
                             >
@@ -191,7 +193,8 @@ function FormDetails(props) {
                                     ))}
                                 </Select>
                             </Form.Item>
-                        </Row>
+                        </Row> : <div/>
+                        }
                         <Form.Item
                             name="Content"
                             label="Content"
