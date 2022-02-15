@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Login from './Components/login-form';
 import ProjectDashBoard from './Components/project-dashboard';
 
 function App() {
@@ -7,8 +6,7 @@ function App() {
     <BrowserRouter>
     <div className="App">
       <Switch>
-      <Route path = '/' component = {Login} exact/>
-      <Route path = '/user:id/dashboard' component = {ProjectDashBoard}/>
+      <Route path = '/' component = {ProjectDashBoard}/>
       </Switch>
     </div>
     </BrowserRouter>
