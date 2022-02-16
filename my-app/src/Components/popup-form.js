@@ -1,8 +1,10 @@
-import React, { useState, useEffect, Fragment } from 'react'
-import { Dialog, DialogContent, DialogTitle, Grid, makeStyles, TextField, TextareaAutosize, Button } from '@material-ui/core';
+import React, { useState } from 'react'
+import { Dialog, DialogContent, DialogTitle, Grid, TextField, TextareaAutosize, Button } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import {createEmployee} from  '../Api/dashboard';
+import { createEmployee } from '../Api/dashboard';
+import { notificationContent } from '../Shared Files/notification';
+var moment = require('moment');
 
 const initialValues = {
     firstName: '',
@@ -10,15 +12,15 @@ const initialValues = {
     emailID: '',
     currentAddress: '',
     permanentAddress: '',
-    graduationDate: new Date(),
+    graduationDate: moment(new Date()).format('D MMMM YYYY'),
     yearsOfExperience: 0,
     skillSet: '',
 }
 
 export default function Popup(props) {
     const [values, setValues] = useState(initialValues);
-    const { title, children, openPopup, setOpenPopup } = props;
-    // const classes = useStyle();
+    const { title, openPopup, setOpenPopup, fetchData } = props;
+
 
     const handleForm = (event) => {
         const { name, value } = event.target;
@@ -30,23 +32,23 @@ export default function Popup(props) {
     }
 
     const handleSubmit = () => {
-        console.log("fiunal-->>",values )
-
         createEmployee(values).then((response) => {
-            console.log("p--->", response)
-            // if (response.data === "success") {
-            //     notificationContent(response.data, "NoteSubmit");
-            //     form.resetFields();
-            //     clearFormValues();
-            //     props.cancel(false);
-            //     props.gridData();
-            // } 
-            // else return notificationContent("error", "NoteSubmit");
+            if (response.data === "success") {
+                notificationContent("success", "Submission");
+                setValues(initialValues);
+                handleClose();
+                fetchData();
+            }
+            else {
+                notificationContent("error", "Submission");
+            }
         });
+
     }
 
     const handleClose = () => {
-        setOpenPopup(false)
+        setOpenPopup(false);
+        setValues(initialValues);
     }
 
     return (
@@ -121,14 +123,14 @@ export default function Popup(props) {
                                     name="graduationDate"
                                     // onChange={handleForm}
                                     animateYearScrolling
-                                    onChange={date => handleForm({ target: { value: date, name: 'graduationDate' } })}
+                                    onChange={date => handleForm({ target: { value: moment(date).format('D MMMM YYYY'), name: 'graduationDate' } })}
                                     style={{ margin: 6 }}
                                 />
                             </MuiPickersUtilsProvider>
                             <TextField
                                 id="outlined-number"
                                 label="Years Of Experience"
-                                name= "yearsOfExperience"
+                                name="yearsOfExperience"
                                 type="number"
                                 value={values.yearsOfExperience}
                                 InputLabelProps={{
@@ -139,9 +141,9 @@ export default function Popup(props) {
                             />
                         </Grid>
                     </Grid>
-                    <div className='action-buttons'  style={{float:'right', margin:'15px'}}>
-                    <Button color="primary" variant="contained" onClick={handleSubmit}
-                     style={{margin: '5px'}}>
+                    <div className='action-buttons' style={{ float: 'right', margin: '15px' }}>
+                        <Button color="primary" variant="contained" onClick={handleSubmit}
+                            style={{ margin: '5px' }}>
                             Submit
                         </Button>
                         <Button color="primary" variant="outlined" onClick={handleClose}>

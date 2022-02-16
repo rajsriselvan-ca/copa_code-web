@@ -10,6 +10,6 @@ export const createEmployee = (payload) => {
 export const deleteEmployee = (id) => {
     return Axios.delete(`${configData.SERVER_URL}/${`dashboard/delete-employee/${id}`}`);
  }
- export const updateNote = (id, payload) => {
+ export const updateEmployee = (id, payload) => {
     return Axios.put(`${configData.SERVER_URL}/${`dashboard/update-employee/${id}`}`, payload);
  }

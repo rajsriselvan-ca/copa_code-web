@@ -1,21 +1,16 @@
 import { notification } from 'antd';
 
 export const notificationContent = (type, code) => {
-    if(code === "Registration") {
+    if (code === "Submission") {
         notification[type]({
             message: type,
-            description: type === 'success' ?  "User Sucessfully Registered !!" : "User Failed to Register",
+            description: type === 'success' ?  "Employee Sucessfully Submitted !!" : "Failed to Submit",
           });
-    } else if(code === "Login") {
+    } else if(code === "Update") {
         notification[type]({
             message: type,
-            description: type === 'success' ?  "User Sucessfully Logged In !!" : "User Failed to Login, Please check the credentials",
+            description: type === 'success' ?  "Employee Sucessfully Updated !!" : "Failed to Update",
           });
-    } else if(code === "UserExist") {
-        notification[type]({
-            message: type,
-            description: "User already exist, Please try with different Email ID !!",
-        })
     } else if(code === "NoteSubmit") {
         notification[type]({
             message: type,
@@ -24,7 +19,7 @@ export const notificationContent = (type, code) => {
     } else if(code === "deleteConfirmation") {
         notification[type]({
             message: type,
-            description: type === 'success' ?  "Your Notes Deleted Successfully!!" : "Failed to Delete Your Notes",
+            description: type === 'success' ?  "Employee Deleted Successfully!!" : "Failed to Delete Employee",
           });
     } 
 }
