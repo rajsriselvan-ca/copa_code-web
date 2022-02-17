@@ -19,6 +19,7 @@
     "axios": "^0.24.0",
     "bootstrap-icons": "^1.7.2",
     "date-fns": "^2.28.0",
+    "json-server": "^0.17.0",
     "lodash": "^4.17.21",
     "material-table": "^1.69.3",
     "moment": "^2.29.1",

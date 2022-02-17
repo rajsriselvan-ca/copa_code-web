@@ -12,14 +12,14 @@ function ProjectDashBoard() {
     const [title, setTitle] = useState("");
     const [list, setList] = useState([]);
 
-    const fetchData = async () => {
-        const incomingList = await getEmployeeList();
-        setList(incomingList.data);
-    }
+    // const fetchData = async () => {
+    //     const incomingList = await getEmployeeList();
+    //     setList(incomingList.data);
+    // }
 
-    useEffect(() => {
-        fetchData();
-    }, []);    
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);    
     
     const columns = [
         { title: 'Employee ID', field: 'Employee_ID' },
@@ -41,7 +41,7 @@ function ProjectDashBoard() {
             if(response.data == "success") return notificationContent(response.data, "Update");
             else return notificationContent(response.data, "Update");
         });
-        fetchData();
+        // fetchData();
     }
 
     const handleDelete = async (id) => {
@@ -49,7 +49,7 @@ function ProjectDashBoard() {
             if(response.data == "success") return notificationContent(response.data, "deleteConfirmation");
             else return notificationContent(response.data, "deleteConfirmation");
         });
-        fetchData();
+        // fetchData();
     }
 
     return (
@@ -63,13 +63,26 @@ function ProjectDashBoard() {
                     openPopup={openPopup}
                     setOpenPopup={setOpenPopup}
                     title={title}
-                    fetchData={fetchData}
+                    // fetchData={fetchData}
                 />
                 <div>
                     <MaterialTable
                         title="Employee List"
                         columns={columns}
-                        data={list}
+                        data={query =>
+                            new Promise((resolve, reject) => {
+                                // console.log("vss----", query.page, query.pageSize)
+                                let params = `_page=${query.page+1}&_limit=${query.pageSize}`
+                            getEmployeeList(params).then(resp => {
+                                    console.log("response----", resp)
+                                    resolve({
+                                        data: resp.data,// your data array
+                                        page: query.page,// current page number
+                                        totalCount: 20// total row number
+                                    });
+                                })
+                            })
+                        }
                         editable={{
                             onRowUpdate: (newData, oldData) =>{
                                 return handleEdit(newData)

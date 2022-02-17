@@ -1,9 +1,9 @@
 import Axios from 'axios';
 import configData from '../config.json';
 
-export const getEmployeeList = () => {
-    return Axios.get(`${configData.SERVER_URL}/${'dashboard/get-employee-list'}`);
- }
+export const getEmployeeList = (params) => {
+    return Axios.get(`${configData.SERVER_URL}/${`dashboard/get-employee-list?${params}`}`);
+}
 export const createEmployee = (payload) => {
     return Axios.post(`${configData.SERVER_URL}/${'dashboard/create-employee'}`, payload);
 }
