@@ -4,22 +4,24 @@ import { Button } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import AddIcon from '@material-ui/icons/Add';
 import Popup from '../Components/popup-form';
-import {getEmployeeList, updateEmployee, deleteEmployee} from  '../Api/dashboard';
+import {getEmployeeList, updateEmployee, deleteEmployee, getAllEmployeeList} from  '../Api/dashboard';
 
 
 function ProjectDashBoard() {
     const [openPopup, setOpenPopup] = useState(false);
     const [title, setTitle] = useState("");
-    const [list, setList] = useState([]);
+    const [totalList, setTotalList] = useState([]);
+    const [totalListCount, setTotalListCount] = useState();
 
-    // const fetchData = async () => {
-    //     const incomingList = await getEmployeeList();
-    //     setList(incomingList.data);
-    // }
+    const fetchData = async () => {
+        const incomingList = await getAllEmployeeList();
+        setTotalList(incomingList.data);
+        setTotalListCount(incomingList.data.length);
+    }
 
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);    
+    useEffect(() => {
+       fetchData();
+    }, []);    
     
     const columns = [
         { title: 'Employee ID', field: 'Employee_ID' },
@@ -41,7 +43,7 @@ function ProjectDashBoard() {
             if(response.data == "success") return notificationContent(response.data, "Update");
             else return notificationContent(response.data, "Update");
         });
-        // fetchData();
+        fetchData();
     }
 
     const handleDelete = async (id) => {
@@ -49,7 +51,7 @@ function ProjectDashBoard() {
             if(response.data == "success") return notificationContent(response.data, "deleteConfirmation");
             else return notificationContent(response.data, "deleteConfirmation");
         });
-        // fetchData();
+        fetchData();
     }
 
     return (
@@ -63,7 +65,7 @@ function ProjectDashBoard() {
                     openPopup={openPopup}
                     setOpenPopup={setOpenPopup}
                     title={title}
-                    // fetchData={fetchData}
+                    fetchData={fetchData}
                 />
                 <div>
                     <MaterialTable
@@ -71,14 +73,14 @@ function ProjectDashBoard() {
                         columns={columns}
                         data={query =>
                             new Promise((resolve, reject) => {
-                                // console.log("vss----", query.page, query.pageSize)
-                                let params = `_page=${query.page+1}&_limit=${query.pageSize}`
-                            getEmployeeList(params).then(resp => {
-                                    console.log("response----", resp)
+                                const params = {
+                                    pageNumber : query.page
+                                }
+                                getEmployeeList(params).then(resp => {
                                     resolve({
-                                        data: resp.data,// your data array
-                                        page: query.page,// current page number
-                                        totalCount: 20// total row number
+                                        data: resp.data,
+                                        page: query.page,
+                                        totalCount: totalListCount ? totalListCount : 100
                                     });
                                 })
                             })

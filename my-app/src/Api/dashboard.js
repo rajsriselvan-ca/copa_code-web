@@ -2,7 +2,10 @@ import Axios from 'axios';
 import configData from '../config.json';
 
 export const getEmployeeList = (params) => {
-    return Axios.get(`${configData.SERVER_URL}/${`dashboard/get-employee-list?${params}`}`);
+    return Axios.get(`${configData.SERVER_URL}/${`dashboard/get-employee-list`}`, {params});
+}
+export const getAllEmployeeList = () => {
+    return Axios.get(`${configData.SERVER_URL}/${`dashboard/get-all-employee-list`}`);
 }
 export const createEmployee = (payload) => {
     return Axios.post(`${configData.SERVER_URL}/${'dashboard/create-employee'}`, payload);

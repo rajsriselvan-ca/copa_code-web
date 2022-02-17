@@ -121,7 +121,7 @@ export default function Popup(props) {
                                     label="Graduation Date"
                                     value={values.graduationDate}
                                     name="graduationDate"
-                                    // onChange={handleForm}
+                                    onChange={handleForm}
                                     animateYearScrolling
                                     onChange={date => handleForm({ target: { value: moment(date).format('D MMMM YYYY'), name: 'graduationDate' } })}
                                     style={{ margin: 6 }}
