@@ -19,6 +19,8 @@ const initialValues = {
 
 export default function Popup(props) {
     const [values, setValues] = useState(initialValues);
+    const [errors, setErrors] = useState({});
+    const [hasError, setHasError] = useState(false);
     const { title, openPopup, setOpenPopup, fetchData } = props;
 
 
@@ -28,22 +30,45 @@ export default function Popup(props) {
             ...values,
             [name]: value,
         })
-
     }
 
-    const handleSubmit = () => {
-        createEmployee(values).then((response) => {
-            if (response.data === "success") {
-                notificationContent("success", "Submission");
-                setValues(initialValues);
-                handleClose();
-                fetchData();
+    const fieldValidation = () => {
+        let temp = {}
+        temp.firstName = values.firstName ? "" : "Please Enter First Name";
+        temp.lastName = values.lastName ? "" : "Please Enter Last Name";
+        temp.emailID = (/$^|.+@.+..+/).test(values.emailID) && values.emailID.length > 0 ? "" : "Please Enter Valid Email ID";
+        temp.skillSet = values.skillSet ? "" : "Please Enter SkillSet";
+        let yearsOfExperience = 0;
+            yearsOfExperience = parseInt(values.yearsOfExperience);
+            if (yearsOfExperience > 0 && yearsOfExperience < 25) {
+                temp.yearsOfExperience = "";
+            } else {
+                temp.yearsOfExperience = "Please Enter a Valid Year of Experience";
             }
-            else {
-                notificationContent("error", "Submission");
-            }
+        setErrors({
+            ...temp
         });
+        return Object.values(temp).some(x => x !== "");
+    }
 
+    const handleSubmit = (e) => {
+        setHasError(fieldValidation());
+        if (!fieldValidation()) {
+            createEmployee(values).then((response) => {
+                if (response.data === "success") {
+                    notificationContent("success", "Submission");
+                    setValues(initialValues);
+                    handleClose();
+                    fetchData();
+                }
+                else {
+                    notificationContent("error", "Submission");
+                }
+            });
+        }
+        else {
+            return
+        }
     }
 
     const handleClose = () => {
@@ -61,6 +86,9 @@ export default function Popup(props) {
                     <Grid container>
                         <Grid item xs={6}>
                             <TextField
+                                required={true}
+                                error={!!errors.firstName}
+                                helperText={errors.firstName}
                                 variant='outlined'
                                 label="First Name"
                                 name="firstName"
@@ -69,6 +97,9 @@ export default function Popup(props) {
                                 onChange={handleForm}
                             />
                             <TextField
+                                required={true}
+                                error={!!errors.lastName}
+                                helperText={errors.lastName}
                                 variant='outlined'
                                 label="Last Name"
                                 name="lastName"
@@ -77,6 +108,9 @@ export default function Popup(props) {
                                 onChange={handleForm}
                             />
                             <TextField
+                                required={true}
+                                error={!!errors.emailID}
+                                helperText={errors.emailID}
                                 variant='outlined'
                                 label="Email ID"
                                 name="emailID"
@@ -85,6 +119,9 @@ export default function Popup(props) {
                                 onChange={handleForm}
                             />
                             <TextField
+                                required={true}
+                                error={!!errors.skillSet}
+                                helperText={errors.skillSet}
                                 variant='outlined'
                                 label="SkillSet"
                                 name="skillSet"
@@ -128,6 +165,9 @@ export default function Popup(props) {
                                 />
                             </MuiPickersUtilsProvider>
                             <TextField
+                                required={true}
+                                error={!!errors.yearsOfExperience}
+                                helperText={errors.yearsOfExperience}
                                 id="outlined-number"
                                 label="Years Of Experience"
                                 name="yearsOfExperience"
@@ -142,7 +182,7 @@ export default function Popup(props) {
                         </Grid>
                     </Grid>
                     <div className='action-buttons' style={{ float: 'right', margin: '15px' }}>
-                        <Button color="primary" variant="contained" onClick={handleSubmit}
+                        <Button color="primary" variant="contained" onClick={(e) => handleSubmit(e)}
                             style={{ margin: '5px' }}>
                             Submit
                         </Button>
