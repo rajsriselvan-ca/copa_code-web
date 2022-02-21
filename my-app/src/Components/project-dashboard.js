@@ -11,12 +11,10 @@ function ProjectDashBoard() {
     const [openPopup, setOpenPopup] = useState(false);
     const [title, setTitle] = useState("");
     const [totalList, setTotalList] = useState([]);
-    const [totalListCount, setTotalListCount] = useState();
 
     const fetchData = async () => {
         const incomingList = await getAllEmployeeList();
         setTotalList(incomingList.data);
-        setTotalListCount(incomingList.data.length);
     }
 
     useEffect(() => {
@@ -76,11 +74,11 @@ function ProjectDashBoard() {
                                 const params = {
                                     pageNumber : query.page
                                 }
-                                getEmployeeList(params).then(resp => {
+                             getEmployeeList(params).then(resp => {
                                     resolve({
-                                        data: resp.data,
+                                        data: resp.data.data,
                                         page: query.page,
-                                        totalCount: totalListCount ? totalListCount : 100
+                                        totalCount: resp.data.totalCount
                                     });
                                 })
                             })
