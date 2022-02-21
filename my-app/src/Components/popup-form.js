@@ -72,6 +72,7 @@ export default function Popup(props) {
     }
 
     const handleClose = () => {
+        setErrors({})
         setOpenPopup(false);
         setValues(initialValues);
     }
