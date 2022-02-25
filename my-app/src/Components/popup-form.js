@@ -20,7 +20,6 @@ const initialValues = {
 export default function Popup(props) {
     const [values, setValues] = useState(initialValues);
     const [errors, setErrors] = useState({});
-    const [hasError, setHasError] = useState(false);
     const { title, openPopup, setOpenPopup, fetchData } = props;
 
 
@@ -32,10 +31,23 @@ export default function Popup(props) {
         })
     }
 
+    const handleAPIError = (data) => {
+        const record = data.errors;
+        let temp = {}
+        temp.firstName = record.some(e => e.param === "firstName") ? "Please Enter a Valid First Name" : "";
+        temp.lastName =  record.some(e => e.param === "lastName") ? "Please Enter a Valid Last Name" : "";
+        temp.emailID = record.some(e => e.param === "emailID") ? "Please Enter a Valid Last Name" : "";
+        temp.skillSet = record.some(e => e.param === "skillSet") ? "Please Enter a Valid Last Name" : "";
+        temp.yearsOfExperience = record.some(e => e.param === "yearsOfExperience") ? "Please Enter a Valid Last Name" : "";
+        setErrors({
+            ...temp
+        });
+    }
+
     const fieldValidation = () => {
         let temp = {}
-        temp.firstName = values.firstName ? "" : "Please Enter First Name";
-        temp.lastName = values.lastName ? "" : "Please Enter Last Name";
+        temp.firstName = values.firstName ? "" : "Please Enter a Valid First Name";
+        temp.lastName = values.lastName ? "" : "Please Enter a Valid Last Name";
         temp.emailID = (/$^|.+@.+..+/).test(values.emailID) && values.emailID.length > 0 ? "" : "Please Enter Valid Email ID";
         temp.skillSet = values.skillSet ? "" : "Please Enter SkillSet";
         let yearsOfExperience = 0;
@@ -52,22 +64,22 @@ export default function Popup(props) {
     }
 
     const handleSubmit = (e) => {
-        setHasError(fieldValidation());
         if (!fieldValidation()) {
             createEmployee(values).then((response) => {
-                if (response.data === "success") {
+                const record = response.data;
+                if (record === "success") {
                     notificationContent("success", "Submission");
                     setValues(initialValues);
                     handleClose();
                     fetchData();
                 }
-                else {
-                    notificationContent("error", "Submission");
+                else if (record.errors.length) {
+                    handleAPIError(record);
                 }
-            });
-        }
-        else {
-            return
+               
+            }).catch((error) => {
+                notificationContent("error", "Submission");
+            })
         }
     }
 
