@@ -20,14 +20,25 @@ const initialValues = {
 export default function Popup(props) {
     const [values, setValues] = useState(initialValues);
     const [errors, setErrors] = useState({});
+    const [file, setFile] = useState();
+    const [fileName, setFileName] = useState("");
+
     const { title, openPopup, setOpenPopup, fetchData } = props;
 
 
     const handleForm = (event) => {
-        const { name, value } = event.target;
+        const { name, value, files } = event.target;
+        if(files && files.length) {
+            console.log("filss--", event.target.files.length)
+            console.log("filss--",event.target.files[0] )
+            
+            setFile(event.target.files[0]);
+            setFileName(event.target.files[0].name);
+        }
+        console.log("no fil--", )
         setValues({
             ...values,
-            [name]: value,
+            [name]:  value,
         })
     }
 
@@ -35,7 +46,7 @@ export default function Popup(props) {
         const record = data.errors;
         let temp = {}
         temp.firstName = record.some(e => e.param === "firstName") ? "Please Enter a Valid First Name" : "";
-        temp.lastName =  record.some(e => e.param === "lastName") ? "Please Enter a Valid Last Name" : "";
+        temp.lastName = record.some(e => e.param === "lastName") ? "Please Enter a Valid Last Name" : "";
         temp.emailID = record.some(e => e.param === "emailID") ? "Please Enter a Valid Last Name" : "";
         temp.skillSet = record.some(e => e.param === "skillSet") ? "Please Enter a Valid Last Name" : "";
         temp.yearsOfExperience = record.some(e => e.param === "yearsOfExperience") ? "Please Enter a Valid Last Name" : "";
@@ -46,17 +57,17 @@ export default function Popup(props) {
 
     const fieldValidation = () => {
         let temp = {}
-        temp.firstName = values.firstName ? "" : "Please Enter a Valid First Name";
-        temp.lastName = values.lastName ? "" : "Please Enter a Valid Last Name";
-        temp.emailID = (/$^|.+@.+..+/).test(values.emailID) && values.emailID.length > 0 ? "" : "Please Enter Valid Email ID";
-        temp.skillSet = values.skillSet ? "" : "Please Enter SkillSet";
-        let yearsOfExperience = 0;
-            yearsOfExperience = parseInt(values.yearsOfExperience);
-            if (yearsOfExperience > 0 && yearsOfExperience < 25) {
-                temp.yearsOfExperience = "";
-            } else {
-                temp.yearsOfExperience = "Please Enter a Valid Year of Experience";
-            }
+        // temp.firstName = values.firstName ? "" : "Please Enter a Valid First Name";
+        // temp.lastName = values.lastName ? "" : "Please Enter a Valid Last Name";
+        // temp.emailID = (/$^|.+@.+..+/).test(values.emailID) && values.emailID.length > 0 ? "" : "Please Enter Valid Email ID";
+        // temp.skillSet = values.skillSet ? "" : "Please Enter SkillSet";
+        // let yearsOfExperience = 0;
+        //     yearsOfExperience = parseInt(values.yearsOfExperience);
+        //     if (yearsOfExperience > 0 && yearsOfExperience < 25) {
+        //         temp.yearsOfExperience = "";
+        //     } else {
+        //         temp.yearsOfExperience = "Please Enter a Valid Year of Experience";
+        //     }
         setErrors({
             ...temp
         });
@@ -64,8 +75,14 @@ export default function Popup(props) {
     }
 
     const handleSubmit = (e) => {
+        console.log("state--->> ", file, "-->>",fileName )
         if (!fieldValidation()) {
-            createEmployee(values).then((response) => {
+            const formData = new FormData();
+        formData.append("file", file);
+        formData.append("fileName", fileName);
+        formData.append("formFields", JSON.stringify(values));
+        // formData.append(fileName, file);
+            createEmployee(formData).then((response) => {
                 const record = response.data;
                 if (record === "success") {
                     notificationContent("success", "Submission");
@@ -76,7 +93,7 @@ export default function Popup(props) {
                 else if (record.errors.length) {
                     handleAPIError(record);
                 }
-               
+
             }).catch((error) => {
                 notificationContent("error", "Submission");
             })
@@ -89,13 +106,37 @@ export default function Popup(props) {
         setValues(initialValues);
     }
 
+    // const saveFile = (e) => {
+        
+    //   };
+ 
+      const uploadFile = async (e) => {
+          console.log("000state--->> ", values)
+        // const formData = new FormData();
+        // formData.append("file", file);
+        // formData.append("fileName", fileName);
+        // try {
+        //   const res = await axios.post(
+        //     "http://localhost:3000/upload",
+        //     formData
+        //   );
+        //   console.log(res);
+        // } catch (ex) {
+        //   console.log(ex);
+        // }
+      };
+
     return (
         <Dialog open={openPopup} >
             <DialogTitle >
                 {title}
             </DialogTitle>
             <DialogContent >
-                <form>
+                <form >
+                    <div className="App">
+                        <input type="file" onChange={event => handleForm(event)} />
+                        {/* <button onClick={uploadFile}>Upload</button> */}
+                    </div>
                     <Grid container>
                         <Grid item xs={6}>
                             <TextField
