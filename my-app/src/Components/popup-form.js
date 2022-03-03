@@ -29,13 +29,9 @@ export default function Popup(props) {
     const handleForm = (event) => {
         const { name, value, files } = event.target;
         if(files && files.length) {
-            console.log("filss--", event.target.files.length)
-            console.log("filss--",event.target.files[0] )
-            
             setFile(event.target.files[0]);
             setFileName(event.target.files[0].name);
         }
-        console.log("no fil--", )
         setValues({
             ...values,
             [name]:  value,
@@ -57,17 +53,17 @@ export default function Popup(props) {
 
     const fieldValidation = () => {
         let temp = {}
-        // temp.firstName = values.firstName ? "" : "Please Enter a Valid First Name";
-        // temp.lastName = values.lastName ? "" : "Please Enter a Valid Last Name";
-        // temp.emailID = (/$^|.+@.+..+/).test(values.emailID) && values.emailID.length > 0 ? "" : "Please Enter Valid Email ID";
-        // temp.skillSet = values.skillSet ? "" : "Please Enter SkillSet";
-        // let yearsOfExperience = 0;
-        //     yearsOfExperience = parseInt(values.yearsOfExperience);
-        //     if (yearsOfExperience > 0 && yearsOfExperience < 25) {
-        //         temp.yearsOfExperience = "";
-        //     } else {
-        //         temp.yearsOfExperience = "Please Enter a Valid Year of Experience";
-        //     }
+        temp.firstName = values.firstName ? "" : "Please Enter a Valid First Name";
+        temp.lastName = values.lastName ? "" : "Please Enter a Valid Last Name";
+        temp.emailID = (/$^|.+@.+..+/).test(values.emailID) && values.emailID.length > 0 ? "" : "Please Enter Valid Email ID";
+        temp.skillSet = values.skillSet ? "" : "Please Enter SkillSet";
+        let yearsOfExperience = 0;
+            yearsOfExperience = parseInt(values.yearsOfExperience);
+            if (yearsOfExperience > 0 && yearsOfExperience < 25) {
+                temp.yearsOfExperience = "";
+            } else {
+                temp.yearsOfExperience = "Please Enter a Valid Year of Experience";
+            }
         setErrors({
             ...temp
         });
@@ -75,13 +71,13 @@ export default function Popup(props) {
     }
 
     const handleSubmit = (e) => {
-        console.log("state--->> ", file, "-->>",fileName )
         if (!fieldValidation()) {
-            const formData = new FormData();
+        const formData = new FormData();
         formData.append("file", file);
         formData.append("fileName", fileName);
-        formData.append("formFields", JSON.stringify(values));
-        // formData.append(fileName, file);
+        Object.entries(values).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
             createEmployee(formData).then((response) => {
                 const record = response.data;
                 if (record === "success") {
@@ -106,26 +102,6 @@ export default function Popup(props) {
         setValues(initialValues);
     }
 
-    // const saveFile = (e) => {
-        
-    //   };
- 
-      const uploadFile = async (e) => {
-          console.log("000state--->> ", values)
-        // const formData = new FormData();
-        // formData.append("file", file);
-        // formData.append("fileName", fileName);
-        // try {
-        //   const res = await axios.post(
-        //     "http://localhost:3000/upload",
-        //     formData
-        //   );
-        //   console.log(res);
-        // } catch (ex) {
-        //   console.log(ex);
-        // }
-      };
-
     return (
         <Dialog open={openPopup} >
             <DialogTitle >
@@ -135,7 +111,6 @@ export default function Popup(props) {
                 <form >
                     <div className="App">
                         <input type="file" onChange={event => handleForm(event)} />
-                        {/* <button onClick={uploadFile}>Upload</button> */}
                     </div>
                     <Grid container>
                         <Grid item xs={6}>
