@@ -5,16 +5,29 @@ import MaterialTable from 'material-table';
 import AddIcon from '@material-ui/icons/Add';
 import Popup from '../Components/popup-form';
 import {getEmployeeList, updateEmployee, deleteEmployee, getAllEmployeeList} from  '../Api/dashboard';
+import Pagination from '@material-ui/lab/Pagination';
 
 
 function ProjectDashBoard() {
     const [openPopup, setOpenPopup] = useState(false);
     const [title, setTitle] = useState("");
     const [totalList, setTotalList] = useState([]);
+    const [page, setPage] = useState(1);
+    const [displayCount, setDisplayCount] = useState(5);
+    const [totalCount, setTotalCount] = useState()
+    const [record, setRecord] = useState([]);
 
     const fetchData = async () => {
-        const incomingList = await getAllEmployeeList();
-        setTotalList(incomingList.data);
+        const params = {
+            pageNumber : 0,
+            countToDisplay : displayCount
+        }
+        getEmployeeList(params).then(response => {
+            const record = response.data.data;
+            const count = response.data.totalCount;
+            setRecord(record);
+            setTotalCount(count);
+        })
     }
 
     useEffect(() => {
@@ -52,6 +65,35 @@ function ProjectDashBoard() {
         fetchData();
     }
 
+    const handlePage = (event, value) => {
+        const params = {
+            pageNumber : value == 1 ? 0 : value,
+            countToDisplay : displayCount
+        }
+        getEmployeeList(params).then(response => {
+            const record = response.data.data;
+            const count = response.data.totalCount;
+            setRecord(record);
+            setTotalCount(count);
+        })
+        setPage(value);
+    }
+
+    const handleDisplayCount = (value) => {
+        setDisplayCount(value);
+        const params = {
+            pageNumber : page == 1 ? 0 : page,
+            countToDisplay : value
+        }
+        getEmployeeList(params).then(response => {
+            const record = response.data.data;
+            const count = response.data.totalCount;
+            setRecord(record);
+            setTotalCount(count);
+        })
+    }
+
+
     return (
         <div>
             <div>
@@ -68,21 +110,13 @@ function ProjectDashBoard() {
                 <div>
                     <MaterialTable
                         title="Employee List"
+                        onChangeRowsPerPage={e => handleDisplayCount(e)}
                         columns={columns}
-                        data={query =>
-                            new Promise((resolve, reject) => {
-                                const params = {
-                                    pageNumber : query.page
-                                }
-                             getEmployeeList(params).then(resp => {
-                                    resolve({
-                                        data: resp.data.data,
-                                        page: query.page,
-                                        totalCount: resp.data.totalCount
-                                    });
-                                })
-                            })
-                        }
+                        options={{
+                            sorting: true,
+                            search: true
+                          }}
+                        data={record}
                         editable={{
                             onRowUpdate: (newData, oldData) =>{
                                 return handleEdit(newData)
@@ -92,6 +126,7 @@ function ProjectDashBoard() {
                             }
                         }}
                     />
+                    <Pagination count={Math.round(totalCount/displayCount)+1} page={page} onChange={handlePage} />
                 </div>
             </div>
         </div>
