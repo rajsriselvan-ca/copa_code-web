@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Dialog, DialogContent, DialogTitle, Grid, TextField, TextareaAutosize, Button } from '@material-ui/core';
+import { Dialog, DialogContent, DialogTitle, DialogContentText, DialogActions, Grid, TextField, TextareaAutosize, Button } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { createEmployee } from '../Api/dashboard';
@@ -21,6 +21,10 @@ export default function Popup(props) {
     const [values, setValues] = useState(initialValues);
     const [errors, setErrors] = useState({});
     const [file, setFile] = useState();
+    const [openCaptcha, setOpenCaptcha] = useState(false);
+    const [captcha, setCaptcha] = useState("");
+    const [enteredCaptcha, setEnteredCaptacha] = useState("");
+    const [captchaError, setCaptchaError] = useState(false)
     const [fileName, setFileName] = useState("");
 
     const { title, openPopup, setOpenPopup, fetchData } = props;
@@ -28,13 +32,13 @@ export default function Popup(props) {
 
     const handleForm = (event) => {
         const { name, value, files } = event.target;
-        if(files && files.length) {
+        if (files && files.length) {
             setFile(event.target.files[0]);
             setFileName(event.target.files[0].name);
         }
         setValues({
             ...values,
-            [name]:  value,
+            [name]: value,
         })
     }
 
@@ -58,12 +62,12 @@ export default function Popup(props) {
         temp.emailID = (/$^|.+@.+..+/).test(values.emailID) && values.emailID.length > 0 ? "" : "Please Enter Valid Email ID";
         temp.skillSet = values.skillSet ? "" : "Please Enter SkillSet";
         let yearsOfExperience = 0;
-            yearsOfExperience = parseInt(values.yearsOfExperience);
-            if (yearsOfExperience > 0 && yearsOfExperience < 25) {
-                temp.yearsOfExperience = "";
-            } else {
-                temp.yearsOfExperience = "Please Enter a Valid Year of Experience";
-            }
+        yearsOfExperience = parseInt(values.yearsOfExperience);
+        if (yearsOfExperience > 0 && yearsOfExperience < 25) {
+            temp.yearsOfExperience = "";
+        } else {
+            temp.yearsOfExperience = "Please Enter a Valid Year of Experience";
+        }
         setErrors({
             ...temp
         });
@@ -72,19 +76,17 @@ export default function Popup(props) {
 
     const handleSubmit = (e) => {
         if (!fieldValidation()) {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("fileName", fileName);
-        Object.entries(values).forEach(([key, value]) => {
-            formData.append(key, value);
-        });
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("fileName", fileName);
+            Object.entries(values).forEach(([key, value]) => {
+                formData.append(key, value);
+            });
             createEmployee(formData).then((response) => {
                 const record = response.data;
-                if (record === "success") {
-                    notificationContent("success", "Submission");
-                    setValues(initialValues);
-                    handleClose();
-                    fetchData();
+                if (record.status === "success") {
+                    setCaptcha(record.captcha);
+                    setOpenCaptcha(true);
                 }
                 else if (record.errors.length) {
                     handleAPIError(record);
@@ -102,12 +104,60 @@ export default function Popup(props) {
         setValues(initialValues);
     }
 
+    const closeCaptcha = () => {
+        setOpenCaptcha(false);
+        setCaptchaError(false);
+        notificationContent("error", "Submission");
+        setValues(initialValues);
+        handleClose();
+        fetchData();
+    };
+
+    const captchaSubmit = () => {
+        if (captcha.toLocaleLowerCase() === enteredCaptcha.toLocaleLowerCase()) {
+            setOpenCaptcha(false);
+            setCaptchaError(false);
+            handleClose();
+            notificationContent("success", "Submission");
+            fetchData();
+        } else {
+            console.log("fail")
+            setCaptchaError(true);
+        }
+        
+    }
+
     return (
         <Dialog open={openPopup} >
             <DialogTitle >
                 {title}
             </DialogTitle>
             <DialogContent >
+                <div>{
+                    openCaptcha &&
+                   <Dialog open={openCaptcha} onClose={closeCaptcha}>
+                   <DialogTitle>User Verification</DialogTitle>
+                   <DialogContent>
+                       <DialogContentText>
+                           Please Enter the Captcha Which is Sent to your Email
+                       </DialogContentText>
+                       <TextField
+                           autoFocus
+                           error={captchaError}
+                           margin="dense"
+                           id="name"
+                           label="Captcha Text Field"
+                           variant="standard"
+                           onChange={(e) => setEnteredCaptacha(e.target.value)}
+                       />
+                   </DialogContent>
+                   <DialogActions>
+                       <Button onClick={closeCaptcha}>Cancel Request</Button>
+                       <Button onClick={captchaSubmit}>Submit</Button>
+                   </DialogActions>
+               </Dialog> 
+               }
+                </div>
                 <form >
                     <div className="App">
                         <input type="file" onChange={event => handleForm(event)} />
