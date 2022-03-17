@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Dialog, DialogContent, DialogTitle, DialogContentText, DialogActions, Grid, TextField, TextareaAutosize, Button } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { createEmployee } from '../Api/dashboard';
+import { createEmployee, saveEmployee } from '../Api/dashboard';
 import { notificationContent } from '../Shared Files/notification';
 var moment = require('moment');
 
@@ -85,6 +85,7 @@ export default function Popup(props) {
             createEmployee(formData).then((response) => {
                 const record = response.data;
                 if (record.status === "success") {
+                    setFile();
                     setCaptcha(record.captcha);
                     setOpenCaptcha(true);
                 }
@@ -100,6 +101,7 @@ export default function Popup(props) {
 
     const handleClose = () => {
         setErrors({})
+        setFile();
         setOpenPopup(false);
         setValues(initialValues);
     }
@@ -115,16 +117,24 @@ export default function Popup(props) {
 
     const captchaSubmit = () => {
         if (captcha.toLocaleLowerCase() === enteredCaptcha.toLocaleLowerCase()) {
-            setOpenCaptcha(false);
-            setCaptchaError(false);
-            handleClose();
-            notificationContent("success", "Submission");
-            fetchData();
+            const params = {
+                captcha: captcha
+            }
+            saveEmployee(params).then((response) => {
+                if (response.data == "success") {
+                    setOpenCaptcha(false);
+                    setCaptchaError(false);
+                    handleClose();
+                    notificationContent("success", "Submission");
+                    fetchData();
+                } else {
+                    notificationContent("error", "Submission");
+                }
+            })
+
         } else {
-            console.log("fail")
             setCaptchaError(true);
         }
-        
     }
 
     return (
@@ -135,28 +145,28 @@ export default function Popup(props) {
             <DialogContent >
                 <div>{
                     openCaptcha &&
-                   <Dialog open={openCaptcha} onClose={closeCaptcha}>
-                   <DialogTitle>User Verification</DialogTitle>
-                   <DialogContent>
-                       <DialogContentText>
-                           Please Enter the Captcha Which is Sent to your Email
-                       </DialogContentText>
-                       <TextField
-                           autoFocus
-                           error={captchaError}
-                           margin="dense"
-                           id="name"
-                           label="Captcha Text Field"
-                           variant="standard"
-                           onChange={(e) => setEnteredCaptacha(e.target.value)}
-                       />
-                   </DialogContent>
-                   <DialogActions>
-                       <Button onClick={closeCaptcha}>Cancel Request</Button>
-                       <Button onClick={captchaSubmit}>Submit</Button>
-                   </DialogActions>
-               </Dialog> 
-               }
+                    <Dialog open={openCaptcha} onClose={closeCaptcha}>
+                        <DialogTitle>User Verification</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Please Enter the Captcha Which is Sent to your Email
+                            </DialogContentText>
+                            <TextField
+                                autoFocus
+                                error={captchaError}
+                                margin="dense"
+                                id="name"
+                                label="Captcha Text Field"
+                                variant="standard"
+                                onChange={(e) => setEnteredCaptacha(e.target.value)}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={closeCaptcha}>Cancel Request</Button>
+                            <Button onClick={captchaSubmit}>Submit</Button>
+                        </DialogActions>
+                    </Dialog>
+                }
                 </div>
                 <form >
                     <div className="App">
@@ -237,7 +247,6 @@ export default function Popup(props) {
                                     label="Graduation Date"
                                     value={values.graduationDate}
                                     name="graduationDate"
-                                    onChange={handleForm}
                                     animateYearScrolling
                                     onChange={date => handleForm({ target: { value: moment(date).format('D MMMM YYYY'), name: 'graduationDate' } })}
                                     style={{ margin: 6 }}

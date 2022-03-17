@@ -10,6 +10,9 @@ export const getAllEmployeeList = () => {
 export const createEmployee = (payload) => {
     return Axios.post(`${configData.SERVER_URL}/${'dashboard/create-employee'}`, payload);
 }
+export const saveEmployee = (payload) => {
+    return Axios.post(`${configData.SERVER_URL}/${'dashboard/save-employee'}`, payload);
+}
 export const deleteEmployee = (id) => {
     return Axios.delete(`${configData.SERVER_URL}/${`dashboard/delete-employee/${id}`}`);
  }
