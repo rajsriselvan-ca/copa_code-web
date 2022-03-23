@@ -13,8 +13,8 @@ const config = {
   ],
   state: {
     python: [],
-    // sql: [],
-    // docker: []
+    sql: [],
+    node: []
   },
   widgets: [
     {
@@ -28,27 +28,20 @@ const config = {
         course: "Python"
       }
     },
-    // {
-    //   widgetName: "linux",
-    //   widgetFunc: (props) => <Quiz {...props} />,
-    //   props: {
-    //     course: "Linux"
-    //   }
-    // },
-    // {
-    //   widgetName: "docker",
-    //   widgetFunc: (props) => <Quiz {...props} />,
-    //   props: {
-    //     course: "Docker"
-    //   }
-    // },
-    // {
-    //   widgetName: "sql",
-    //   widgetFunc: (props) => <Quiz {...props} />,
-    //   props: {
-    //     course: "Sql"
-    //   }
-    // }
+    {
+      widgetName: "NodeJS",
+      widgetFunc: (props) => <Quiz {...props} />,
+      props: {
+        course: "NodeJS"
+      }
+    },
+    {
+      widgetName: "sql",
+      widgetFunc: (props) => <Quiz {...props} />,
+      props: {
+        course: "Sql"
+      }
+    }
   ],
   customStyles: {
     botMessageBox: {

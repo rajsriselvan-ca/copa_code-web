@@ -14,21 +14,21 @@ class ActionProvider {
     );
     this.setChatbotMessage(message);
   };
-  // handleDockerQuiz = () => {
-  //   const message = this.createChatBotMessage(
-  //     "Sure! Here's your Docker QUIZ !",
-  //     {
-  //       widget: "docker"
-  //     }
-  //   );
-  //   this.setChatbotMessage(message);
-  // };
-  // handleSqlQuiz = () => {
-  //   const message = this.createChatBotMessage("Sure! Here's your SQL QUIZ !", {
-  //     widget: "sql"
-  //   });
-  //   this.setChatbotMessage(message);
-  // };
+  handleNodeQuiz = () => {
+    const message = this.createChatBotMessage(
+      "Sure! Here's your NodeJS QUIZ !",
+      {
+        widget: "NodeJS"
+      }
+    );
+    this.setChatbotMessage(message);
+  };
+  handleSqlQuiz = () => {
+    const message = this.createChatBotMessage("Sure! Here's your SQL QUIZ !", {
+      widget: "sql"
+    });
+    this.setChatbotMessage(message);
+  };
   handleContinue = () => {
     const message = this.createChatBotMessage(
       "Which quiz you want to try again?",

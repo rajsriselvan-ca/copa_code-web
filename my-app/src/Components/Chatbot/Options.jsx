@@ -8,8 +8,8 @@ function Options(props) {
       id: 1
     },
     {
-      text: "Docker",
-      handler: props.actionProvider.handleDockerQuiz,
+      text: "NodeJS",
+      handler: props.actionProvider.handleNodeQuiz,
       id: 2
     },
     {
