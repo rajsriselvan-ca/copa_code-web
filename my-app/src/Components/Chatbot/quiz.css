@@ -8,3 +8,10 @@ button {
     cursor: pointer;
     border-radius: 20px;
   }
+  .quiz-container {
+    background-color: rgb(92, 204, 157);
+  }
+  .question-text {
+    color: red;
+    font-weight: 500;
+  }

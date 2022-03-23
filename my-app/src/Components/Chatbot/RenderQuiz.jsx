@@ -21,7 +21,7 @@ const RenderQuiz = ({ data }) => {
 	};
 
   return (
-    <div className='app'>
+    <div className='quiz-container'>
 			{showScore ? (
 				<div className='score-section'>
 					<b>You scored {score} out of {data.length}</b>
