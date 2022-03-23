@@ -7,20 +7,16 @@ class MessageParser {
     const lowercase = message.toLowerCase();
     if (lowercase.includes("python")) {
       this.actionProvider.handlePythonQuiz();
-    } 
-    
-    else if (lowercase.includes("nodejs")) {
+    } else if (lowercase.includes("nodejs")) {
       this.actionProvider.handleNodeQuiz();
-    }
-    else if (lowercase.includes("sql")) {
+    } else if (lowercase.includes("sql")) {
       this.actionProvider.handleSqlQuiz();
-    } 
-    else if (lowercase.includes("continue")) {
+    } else if (lowercase.includes("hi") || (lowercase.includes("hello"))) {
+      this.actionProvider.handleHello();
+    } else if (lowercase.includes("continue")) {
       this.actionProvider.handleContinue();
     } else if (lowercase.includes("thank")) {
       this.actionProvider.handleGreeting();
-    } else if (lowercase.includes("score")) {
-      this.actionProvider.handleScoreBoard();
     } else {
       this.actionProvider.handleUnknown();
     }
@@ -28,4 +24,3 @@ class MessageParser {
 }
 export default MessageParser;
 
-  

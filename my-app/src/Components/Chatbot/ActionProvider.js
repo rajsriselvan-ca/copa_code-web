@@ -44,6 +44,12 @@ class ActionProvider {
     );
     this.setChatbotMessage(message);
   };
+  handleHello = () => {
+    const message = this.createChatBotMessage(
+      "Hello There ! Hope you are doing great."
+    );
+    this.setChatbotMessage(message);
+  };
   handleGreeting = () => {
     const message = this.createChatBotMessage(
       "Thanks for trying QuizBot! We hope you had a great learning experience"
