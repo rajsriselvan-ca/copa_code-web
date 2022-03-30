@@ -8,7 +8,7 @@ function App() {
     <div className="App">
     <Routes>
       <Route path = '/' element = {<ProjectDashBoard />}/>
-      <Route path = '/chat' element = {<ChatRender />}/>
+      <Route path = {encodeURIComponent("/chat")} element = {<ChatRender />}/>
       </Routes>
     </div>
     </BrowserRouter>

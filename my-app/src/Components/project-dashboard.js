@@ -6,9 +6,12 @@ import AddIcon from '@material-ui/icons/Add';
 import Popup from '../Components/popup-form';
 import {getEmployeeList, updateEmployee, deleteEmployee, getAllEmployeeList} from  '../Api/dashboard';
 import Pagination from '@material-ui/lab/Pagination';
+import { useNavigate } from "react-router-dom";
+
 
 
 function ProjectDashBoard() {
+    const navigate = useNavigate();
     const [openPopup, setOpenPopup] = useState(false);
     const [title, setTitle] = useState("");
     const [totalList, setTotalList] = useState([]);
@@ -93,6 +96,10 @@ function ProjectDashBoard() {
         })
     }
 
+    const test = () => {
+        navigate(encodeURIComponent("/chat"));
+    }
+
 
     return (
         <div>
@@ -100,6 +107,9 @@ function ProjectDashBoard() {
                 <Button color="primary" variant="contained" style={{ margin: '10px' }} onClick={() => handleCreateEmployee(true, "Create Employee")}
                     startIcon={<AddIcon />}>
                     Create Employee
+                </Button>
+                <Button color="primary" variant="contained" onClick={() => test()}>
+                    Quiz
                 </Button>
                 <Popup
                     openPopup={openPopup}
