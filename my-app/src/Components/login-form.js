@@ -31,7 +31,7 @@ function Login() {
                 if (checkTheUser.length < 1) {
                     return notificationContent("error", "Login");
                 } else {
-                    const loggedinUserID = userList.filter(record => registerUser === record.user_name)[0].user_id;
+                    const loggedinUserID = userList.filter(record => registerUser.toLowerCase() === record.user_name.toLowerCase())[0].user_id;
                     localStorage.setItem('userID',loggedinUserID);
                     localStorage.setItem('userName',registerUser.toLowerCase());
                     notificationContent("success", "Login");

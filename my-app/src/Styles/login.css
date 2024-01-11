@@ -1,11 +1,14 @@
 @import '~antd/dist/antd.css';
+body {
+    background-image: url("../Shared Files/background-image.jpg");
+    height: 100vh;
+}
 
 .login-outline {
     display: flex;
     align-content: center;
     justify-content: center;
     height: 100vh;
-    background-image: url("../Shared Files/background-image.jpg");
 }
 .login-background {
     margin-top: 10%;

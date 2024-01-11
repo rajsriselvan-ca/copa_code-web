@@ -126,8 +126,8 @@ function ProjectDashBoard() {
                     ))}
                 </Menu>}
             </Header>
-            <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
-                <div className="site-layout-background" style={{ minHeight: 380 }}>
+            <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64, height: '50%', minHeight: '89vh' }}>
+                <div className="site-layout-background">
                     <div className="search-container">
                     <Search placeholder="Search Your Notes here.." className="search-bar"
                      enterButton={false} allowClear  onChange={event => searchHandler(event.target.value)} />
