@@ -203,3 +203,7 @@
 .cards {
   height: 100%;
 }
+.no-data-message {
+  position: relative;
+  left: 46%;
+}

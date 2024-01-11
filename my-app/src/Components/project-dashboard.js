@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Layout, Menu, Card, Input, Button} from 'antd';
+import { Layout, Menu, Card, Input, Button, Empty} from 'antd';
 import {PlusOutlined }from '@ant-design/icons';
 import { useHistory } from "react-router-dom";
 import { notificationContent } from "../Shared Files/notification";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import '../Styles/dashboard.css';
 import { getNotesType, getNotes, getAllNotes, deleteNote } from '../Api/dashboard';
-import { Nav, NavDropdown } from 'react-bootstrap';
 import FormDetails from "../Components/modal";
 
 const { Header, Content } = Layout;
@@ -129,12 +128,14 @@ function ProjectDashBoard() {
             <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64, height: '50%', minHeight: '89vh' }}>
                 <div className="site-layout-background">
                     <div className="search-container">
-                    <Search placeholder="Search Your Notes here.." className="search-bar"
+                    <Search placeholder="Search here" className="search-bar"
                      enterButton={false} allowClear  onChange={event => searchHandler(event.target.value)} />
                    <Button type="primary" className="add-button" onClick={event => showModal("create")} icon={<PlusOutlined />} size={"middle"} />
                     </div>
                     <div className="slate-board" >
-                    { searchTerm.length > 1 ? searchResult.map((record, index) => (
+                        {noteList.length <= 0 ?  <div className="no-data-message">
+                                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} imageStyle={{ height: 50, width: 100 }} />
+                            </div> :  searchTerm.length > 1 ? searchResult.map((record, index) => (
                             <div className="cards-container" key={index}>
                                 <Card key={index} className="cards" onClick={event => showModal("edit", record)}  bordered={false}>
                                     <div><span>{showIcon}</span>
