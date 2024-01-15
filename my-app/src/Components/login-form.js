@@ -3,7 +3,7 @@ import { Form, Input, Button, Card } from 'antd';
 import { useHistory } from "react-router-dom";
 import { MailOutlined, LockOutlined, RightCircleFilled, LeftCircleFilled } from '@ant-design/icons';
 import '../Styles/login.css';
-import { registerLogin, getUsers } from '../Api/login';
+import { registerLogin, loginUserDetails } from '../Api/login';
 import moment from "moment";
 import { notificationContent } from '../Shared Files/notification';
 
@@ -12,50 +12,43 @@ function Login() {
     const [registerUser, setRegisterUser] = useState();
     const [registerPassword, setRegisterPassword] = useState();
     const [formType, setFormType] = useState("User-Login");
-    const [userList, setUserList] = useState([]);
     const [form] = Form.useForm();
-
-    const fetchData = async () => {
-        const inComingUsers = await getUsers();
-        setUserList(inComingUsers.data);
-    }
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     const onFinish = () => {
         if (formType === "User-Login") {
-                const checkTheUser = userList.filter(e => e.user_name.toLowerCase() === registerUser.toLowerCase() &&
-                e.user_password.toLowerCase() === registerPassword.toLowerCase());
-                if (checkTheUser.length < 1) {
-                    return notificationContent("error", "Login");
-                } else {
-                    const loggedinUserID = userList.filter(record => registerUser.toLowerCase() === record.user_name.toLowerCase())[0].user_id;
+                const LoginUserDetailsPayload = {
+                    username : registerUser,
+                    password : registerPassword
+                }
+                loginUserDetails(LoginUserDetailsPayload).then((response) => {
+                    const getAccess = response.data;
+                    if (getAccess == "User Not Exist") {
+                        return notificationContent("error", "Login");
+                    } else {
+                    const loggedinUserID = getAccess.user_id;
                     localStorage.setItem('userID',loggedinUserID);
-                    localStorage.setItem('userName',registerUser.toLowerCase());
+                    localStorage.setItem('userName', getAccess.user_name.toLowerCase());
                     notificationContent("success", "Login");
                     history.push(`user${loggedinUserID}/dashboard`);
-                }
+                    }
+                });
         }
         else if (formType === "User-Registration") {
-                const userExist = userList.find(record => record.user_name === registerUser) === undefined ? false : true;
-                if (userExist) {
-                    return notificationContent("warning", "UserExist")
-                } else {
-                    const currentDate = moment().format("DD-MM-YYYY hh:mm A");
-                    const registerPayload = {
+            const currentDate = moment().format("DD-MM-YYYY hh:mm A");
+            const registerPayload = {
                         username: registerUser,
                         password: registerPassword,
                         submission_date: currentDate
                     };
-                    registerLogin(registerPayload).then((response) => {
-                        const status = response.data;
-                        if (status === "success") setFormType("User-Login");
-                        fetchData();
-                        notificationContent(status, "Registration");
-                    });
-                }
+                registerLogin(registerPayload).then((response) => {
+                            const status = response.data;
+                            if (status === "success") {
+                            setFormType("User-Login");
+                            notificationContent(status, "Registration");
+                            } else {
+                                notificationContent(status, "Registration");
+                            }
+                        });
             form.resetFields();
         }
     };

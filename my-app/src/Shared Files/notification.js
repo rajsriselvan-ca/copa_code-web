@@ -4,7 +4,7 @@ export const notificationContent = (type, code) => {
     if(code === "Registration") {
         notification[type]({
             message: type,
-            description: type === 'success' ?  "User Sucessfully Registered !!" : "User Failed to Register",
+            description: type === 'success' ?  "User Sucessfully Registered !!" : "User Already Exist, Please try with new user id.",
           });
     } else if(code === "Login") {
         notification[type]({
