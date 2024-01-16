@@ -25,11 +25,14 @@ function Login() {
                     if (getAccess == "User Not Exist") {
                         return notificationContent("error", "Login");
                     } else {
-                    const loggedinUserID = getAccess.user_id;
-                    localStorage.setItem('userID',loggedinUserID);
-                    localStorage.setItem('userName', getAccess.user_name.toLowerCase());
+                    const getSessionDetails = response.data;
+                    const token = getSessionDetails["token"];
+                    const userID = getSessionDetails["userDetails"]["user_id"];
+                    const userName = getSessionDetails["userDetails"]["user_name"];
+                    localStorage.setItem('userID',userID);
+                    localStorage.setItem('userName', userName.toLowerCase());
                     notificationContent("success", "Login");
-                    history.push(`user${loggedinUserID}/dashboard`);
+                    history.push(`user${userID}/dashboard`);
                     }
                 });
         }
