@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Layout, Menu, Card, Input, Button, Empty } from 'antd';
+import { Layout, Menu, Card, Input, Button, Empty, Spin } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useHistory } from "react-router-dom";
 import { notificationContent } from "../Shared Files/notification";
@@ -26,6 +26,7 @@ function ProjectDashBoard({ setUser }) {
     const [searchResult, setSearchResult] = useState([]);
     const [userName, setUserName] = useState("");
     const [showIcon, setIcon] = useState(<i className="bi bi-file-earmark-code"></i>);
+    const [showLoader, setLoader] = useState(true);
 
     const fetchData = async () => {
         try {
@@ -40,6 +41,7 @@ function ProjectDashBoard({ setUser }) {
             setNoteList(incomingNotes.data)
             const incomingEntireNotes = await getAllNotes(params);
             setEntireNotesList(incomingEntireNotes.data);
+            setLoader(false);
         } catch {
             setSessionModalVisible(true);
         }
@@ -67,6 +69,7 @@ function ProjectDashBoard({ setUser }) {
     }
 
     let handleTabSelection = async (key) => {
+        setLoader(true);
         try {
             const params = {
                 user_id: localStorage.getItem('userID'),
@@ -76,6 +79,7 @@ function ProjectDashBoard({ setUser }) {
             const incomingNotes = await getNotes(params);
             setSelectedTab(key.toString());
             setNoteList(incomingNotes.data);
+            setLoader(false);
         } catch (error) {
             setSessionModalVisible(true); // handling session time out error
         }
@@ -98,11 +102,17 @@ function ProjectDashBoard({ setUser }) {
     }
 
     const handleDelete = async (record) => {
+        setLoader(true);
         try {
             const id = record.note_id;
             await deleteNote(id).then(response => {
-                if (response.data == "success") return notificationContent(response.data, "deleteConfirmation");
-                else return notificationContent(response.data, "deleteConfirmation");
+                if (response.data == "success") {
+                    notificationContent(response.data, "deleteConfirmation");
+                    setLoader(false);
+                } 
+                else {
+                    return notificationContent(response.data, "deleteConfirmation");
+                }
             });
         } catch (error) {
             setSessionModalVisible(true);
@@ -150,6 +160,7 @@ function ProjectDashBoard({ setUser }) {
                             enterButton={false} allowClear onChange={event => searchHandler(event.target.value)} />
                         <Button type="primary" className="add-button" onClick={event => showModal("create")} icon={<PlusOutlined />} size={"middle"} />
                     </div>
+                    <Spin size="large" spinning={showLoader}>
                     <div className="slate-board" >
                         {noteList.length <= 0 ? <div className="no-data-message">
                             <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} imageStyle={{ height: 50, width: 100 }} />
@@ -173,6 +184,7 @@ function ProjectDashBoard({ setUser }) {
                             </div>
                         ))}
                     </div>
+                    </Spin>
                 </div>
             </Content>
             {isSessionModalVisible && <SessionModal setUser={setUser} history={history} visiblity={isSessionModalVisible} />}

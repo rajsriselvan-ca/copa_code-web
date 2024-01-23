@@ -63,7 +63,7 @@ function FormDetails(props) {
 
     const handleOk = () => {
         try {
-            const currentDate = moment().format("DD-MM-YYYY hh:mm A");
+        const currentDate = moment().format("DD-MM-YYYY hh:mm A");
         const payload = {
             note_type_id: selectedCategory,
             user_id: localStorage.getItem('userID'),
