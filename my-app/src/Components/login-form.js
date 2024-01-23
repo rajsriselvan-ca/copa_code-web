@@ -6,8 +6,9 @@ import '../Styles/login.css';
 import { registerLogin, loginUserDetails } from '../Api/login';
 import moment from "moment";
 import { notificationContent } from '../Shared Files/notification';
+import axios from 'axios'
 
-function Login() {
+function Login({setUser}) {
     let history = useHistory();
     const [registerUser, setRegisterUser] = useState();
     const [registerPassword, setRegisterPassword] = useState();
@@ -20,21 +21,24 @@ function Login() {
                     username : registerUser,
                     password : registerPassword
                 }
-                loginUserDetails(LoginUserDetailsPayload).then((response) => {
-                    const getAccess = response.data;
-                    if (getAccess == "User Not Exist") {
-                        return notificationContent("error", "Login");
-                    } else {
-                    const getSessionDetails = response.data;
-                    const token = getSessionDetails["token"];
-                    const userID = getSessionDetails["userDetails"]["user_id"];
-                    const userName = getSessionDetails["userDetails"]["user_name"];
-                    localStorage.setItem('userID',userID);
-                    localStorage.setItem('userName', userName.toLowerCase());
-                    notificationContent("success", "Login");
-                    history.push(`user${userID}/dashboard`);
-                    }
-                });
+                    loginUserDetails(LoginUserDetailsPayload).then((response) => {
+                        const getAccess = response.data;
+                        if (getAccess == "User Not Exist") {
+                            return notificationContent("error", "Login");
+                        } else {
+                        const getSessionDetails = response.data;
+                        const token = getSessionDetails["token"];
+                        const userID = getSessionDetails["userDetails"]["user_id"];
+                        const userName = getSessionDetails["userDetails"]["user_name"];
+                        localStorage.setItem('jwtToken', token)
+                        axios.defaults.headers.common['Authorization'] = token;
+                        setUser({ auth:true, name: userName })
+                        localStorage.setItem('userID',userID);
+                        localStorage.setItem('userName', userName.toLowerCase());
+                        notificationContent("success", "Login");
+                        history.push(`user${userID}/dashboard`);
+                        }
+                    });            
         }
         else if (formType === "User-Registration") {
             const currentDate = moment().format("DD-MM-YYYY hh:mm A");
