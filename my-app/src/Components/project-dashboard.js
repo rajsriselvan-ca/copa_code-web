@@ -66,15 +66,15 @@ function ProjectDashBoard({ setUser }) {
         }
     }
 
-    const handleTabSelection = async (key) => {
+    let handleTabSelection = async (key) => {
         try {
             const params = {
                 user_id: localStorage.getItem('userID'),
                 selectedTab: key,
             }
-            setCardsIcon(key);
+            setCardsIcon(key.toString());
             const incomingNotes = await getNotes(params);
-            setSelectedTab(key);
+            setSelectedTab(key.toString());
             setNoteList(incomingNotes.data);
         } catch (error) {
             setSessionModalVisible(true); // handling session time out error
@@ -137,7 +137,7 @@ function ProjectDashBoard({ setUser }) {
                         <span className="user-name">{userName}</span></div>
                     <div className='logout-outer'><div className='logout-inner' onClick={logoutHandler}>Logout</div></div>
                 </div>
-                {<Menu theme="dark" color="red" mode="horizontal" defaultSelectedKeys={[selectedTab]}>
+                {<Menu theme="dark" color="red" mode="horizontal" selectedKeys={[selectedTab]}>
                     {getNotesCategory.map((data) => (
                         <Menu.Item key={data.notes_type_id} onClick={event => handleTabSelection(event.key)}>{data.notes_type}</Menu.Item>
                     ))}
@@ -176,7 +176,7 @@ function ProjectDashBoard({ setUser }) {
                 </div>
             </Content>
             {isSessionModalVisible && <SessionModal setUser={setUser} history={history} visiblity={isSessionModalVisible} />}
-            {isModalVisible && <FormDetails setSessionModalVisible={setSessionModalVisible} visiblity={isModalVisible} gridData={fetchData} edit={editContent} cancel={onCancel} />}
+            {isModalVisible && <FormDetails handleTabSelection={handleTabSelection} setSessionModalVisible={setSessionModalVisible} visiblity={isModalVisible} gridData={fetchData} edit={editContent} cancel={onCancel} />}
             <a className="footer" target='_blank' href='http://www.linkedin.com/in/rajsriselvan'><small>Created by Raj Sri Selvan</small></a>
         </Layout>
     )

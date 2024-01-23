@@ -80,7 +80,7 @@ function FormDetails(props) {
                     clearFormValues();
                     props.cancel(false);
                     setEditForm(false);
-                    props.gridData();
+                    props.handleTabSelection(selectedCategory);
                 } 
                 else return notificationContent("error", "NoteSubmit");
             })
@@ -91,7 +91,7 @@ function FormDetails(props) {
                     form.resetFields();
                     clearFormValues();
                     props.cancel(false);
-                    props.gridData();
+                    props.handleTabSelection(selectedCategory);
                 } 
                 else return notificationContent("error", "NoteSubmit");
             });
@@ -155,7 +155,6 @@ function FormDetails(props) {
                                         onChange={event => setSelectedCategory(event)}
                                         onFocus={onFocus}
                                         onBlur={onBlur}
-                                        // onSearch={onSearch}
                                         filterOption={(input, option) =>
                                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                         }
