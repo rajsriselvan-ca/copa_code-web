@@ -1,0 +1,19 @@
+
+.note-submit {
+    margin-left: 5px;
+}
+.modal-buttons {
+    position:relative; float: right; top: -14px;
+    margin-bottom: 2%;
+}
+.note-submit {
+    background-color: #26afeb;
+    box-shadow: 0 0 5px #636f80;
+}
+.note-submit:hover {
+    background-color: #26afeb;
+    transform: scale(1.1);
+}
+.note-close:hover {
+    color: #26afeb;
+}
