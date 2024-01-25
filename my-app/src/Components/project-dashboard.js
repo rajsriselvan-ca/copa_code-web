@@ -49,6 +49,10 @@ function ProjectDashBoard({ setUser }) {
 
     useEffect(() => {
         fetchData();
+        const handleBackButton = () => {
+            logoutHandler();
+          };
+        window.addEventListener('popstate', handleBackButton);
     }, []);
 
     function setCardsIcon(key) {
