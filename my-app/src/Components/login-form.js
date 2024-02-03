@@ -13,10 +13,12 @@ function Login({setUser}) {
     const [registerUser, setRegisterUser] = useState();
     const [registerPassword, setRegisterPassword] = useState();
     const [formType, setFormType] = useState("User-Login");
+    const [loginButtonDisable, setloginButtonDisable] = useState(false);
     const [form] = Form.useForm();
 
     const onFinish = () => {
         if (formType === "User-Login") {
+                setloginButtonDisable(true);
                 const LoginUserDetailsPayload = {
                     username : registerUser,
                     password : registerPassword
@@ -24,7 +26,8 @@ function Login({setUser}) {
                     loginUserDetails(LoginUserDetailsPayload).then((response) => {
                         const getAccess = response.data;
                         if (getAccess == "User Not Exist") {
-                            return notificationContent("error", "Login");
+                        setloginButtonDisable(false);
+                        notificationContent("error", "Login");
                         } else {
                         const getSessionDetails = response.data;
                         const token = getSessionDetails["token"];
@@ -108,7 +111,7 @@ function Login({setUser}) {
                                     />
                                 </Form.Item>
                                 <Form.Item>
-                                    <Button type="primary" htmlType="submit" className="login-form-button" >
+                                    <Button type="primary" disabled={loginButtonDisable} htmlType="submit" className="login-form-button" >
                                         {formType !== "User-Login" ? "Register" : "Login"}
                                     </Button>
                                 </Form.Item>
