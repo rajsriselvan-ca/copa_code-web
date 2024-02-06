@@ -46,12 +46,12 @@ function ProjectDashBoard({ setUser }) {
             setSessionModalVisible(true);
         }
     }
+    const handleBackButton = () => {
+        logoutHandler();
+      };
 
     useEffect(() => {
         fetchData();
-        const handleBackButton = () => {
-            logoutHandler();
-          };
         window.addEventListener('popstate', handleBackButton);
     }, []);
 

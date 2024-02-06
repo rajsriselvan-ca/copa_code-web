@@ -20,17 +20,6 @@ function App() {
       delete axios.defaults.headers.common['Authorization'];
       setUser({ auth: false, name: '' });
     }
-    const handleBeforeUnload = () => {
-      // Clear the localStorage on refresh
-      localStorage.removeItem('jwtToken');
-    };
-  
-    window.addEventListener('beforeunload', handleBeforeUnload);
-  
-    // Clean up the event listener when the component is unmounted
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
   }, []);
 
  
@@ -42,7 +31,7 @@ function App() {
       <Switch>
       { user.auth? <Route path = '/user:id/dashboard' render={() => <ProjectDashBoard setUser={setUser} />}/> : 
       <Route path = '/' render={() => <Login setUser={setUser} />} exact/>}
-      {!user.auth && <Redirect to="/" />}
+      {!user.auth && <Route path = '/' render={() => <Login setUser={setUser} />} exact/>}
       </Switch>
     </div>
     </BrowserRouter>

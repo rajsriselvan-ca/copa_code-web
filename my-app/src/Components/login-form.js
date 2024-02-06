@@ -20,7 +20,7 @@ function Login({setUser}) {
         if (formType === "User-Login") {
                 setloginButtonDisable(true);
                 const LoginUserDetailsPayload = {
-                    username : registerUser,
+                    username : registerUser.toLowerCase(),
                     password : registerPassword
                 }
                     loginUserDetails(LoginUserDetailsPayload).then((response) => {
@@ -46,7 +46,7 @@ function Login({setUser}) {
         else if (formType === "User-Registration") {
             const currentDate = moment().format("DD-MM-YYYY hh:mm A");
             const registerPayload = {
-                        username: registerUser,
+                        username: registerUser.toLowerCase(),
                         password: registerPassword,
                         submission_date: currentDate
                     };
