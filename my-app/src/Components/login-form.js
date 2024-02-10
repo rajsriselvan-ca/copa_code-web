@@ -98,6 +98,13 @@ function Login({setUser}) {
                                         {
                                             required: true,
                                             message: 'Please enter your password',
+                                        },{
+                                            validator: (_, value) => {
+                                                if (value && (value.includes('\'')) || value.includes('\\')) {
+                                                    return Promise.reject('Password cannot contain (Quote or Backslash)');
+                                                }
+                                                return Promise.resolve();
+                                            },
                                         },
                                     ]}
                                 >

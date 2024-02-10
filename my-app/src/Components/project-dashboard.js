@@ -166,7 +166,7 @@ function ProjectDashBoard({ setUser }) {
                     </div>
                     <Spin size="large" spinning={showLoader}>
                     <div className="slate-board" >
-                        {noteList.length <= 0 ? <div className="no-data-message">
+                        {!searchTerm.length && noteList.length <= 0 ? <div className="no-data-message">
                             <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} imageStyle={{ height: 50, width: 100 }} />
                         </div> : searchTerm.length > 1 ? searchResult.map((record, index) => (
                             <div className="cards-container" key={index}>
@@ -192,8 +192,8 @@ function ProjectDashBoard({ setUser }) {
                 </div>
             </Content>
             {isSessionModalVisible && <SessionModal setUser={setUser} history={history} visiblity={isSessionModalVisible} />}
-            {isModalVisible && <FormDetails handleTabSelection={handleTabSelection} setSessionModalVisible={setSessionModalVisible} visiblity={isModalVisible} gridData={fetchData} edit={editContent} cancel={onCancel} />}
-            <a className="footer" target='_blank' href='http://www.linkedin.com/in/rajsriselvan'><small>Created by Raj Sri Selvan</small></a>
+            {isModalVisible && <FormDetails selectedTab={selectedTab} setEntireNotesList={setEntireNotesList} handleTabSelection={handleTabSelection} setSessionModalVisible={setSessionModalVisible} visiblity={isModalVisible} gridData={fetchData} edit={editContent} cancel={onCancel} />}
+            <a className="footer" target='_blank' href='http://www.linkedin.com/in/rajsriselvan'><small>Developed by Raj Sri Selvan</small></a>
         </Layout>
     )
 }

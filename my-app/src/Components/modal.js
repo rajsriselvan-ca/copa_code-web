@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Input, Button, Modal, Select, Row, Col } from 'antd';
 import "../Styles/modal.css"
-import { getNotesType, getProgramLanguage, createNotes, updateNote } from "../Api/dashboard";
+import { getNotesType, getProgramLanguage, createNotes, updateNote, getAllNotes } from "../Api/dashboard";
 import moment from "moment";
 import { notificationContent } from "../Shared Files/notification";
 
@@ -12,7 +12,6 @@ function FormDetails(props) {
     const [form] = Form.useForm();
     const [editForm, setEditForm] = useState(false);
     const [getCategory, setCategory] = useState([]);
-    const [getProgramType, setProgramType] = useState([]);
     const [selectedTitle, setSelectedTitle] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState([]);
     const [selectedProgram, setSelectedProgram] = useState(0);
@@ -25,7 +24,6 @@ function FormDetails(props) {
             const incomingCategory = await getNotesType();
                 const incomingLanguage = await getProgramLanguage();
                 setCategory(incomingCategory.data);
-                setProgramType(incomingLanguage.data);
             const checkEditValue = editValue.hasOwnProperty('note_id');
             if(checkEditValue) {
                 setSelectedTitle(editValue.note_title);
@@ -61,6 +59,15 @@ function FormDetails(props) {
         setSelectedContent([]);
     }
 
+    const getAllNotesHandler = async () => {
+        const params = {
+            user_id: localStorage.getItem('userID'),
+            selectedTab: props.selectedTab,
+        }
+        const incomingEntireNotes = await getAllNotes(params);
+        props.setEntireNotesList(incomingEntireNotes.data);
+    }
+
     const handleOk = () => {
         try {
         const currentDate = moment().format("DD-MM-YYYY hh:mm A");
@@ -81,6 +88,7 @@ function FormDetails(props) {
                     props.cancel(false);
                     setEditForm(false);
                     props.handleTabSelection(selectedCategory);
+                    getAllNotesHandler();
                 } 
                 else return notificationContent("error", "NoteSubmit");
             })
@@ -92,6 +100,7 @@ function FormDetails(props) {
                     clearFormValues();
                     props.cancel(false);
                     props.handleTabSelection(selectedCategory);
+                    getAllNotesHandler();
                 } 
                 else return notificationContent("error", "NoteSubmit");
             });
@@ -135,7 +144,9 @@ function FormDetails(props) {
                                     <Input placeholder="Enter Title" onChange={event => setSelectedTitle(event.target.value)} />
                                 </Form.Item>
                             </Col>
-                            <Col offset={4} >
+                            </Row>
+                            <Row>
+                            <Col>
                                 <Form.Item
                                     name="Category"
                                     label="Category"

@@ -14,7 +14,7 @@ function App() {
     if (storedToken) {
       // If token is present, set it in axios headers and update user authentication
       axios.defaults.headers.common['Authorization'] = storedToken;
-      setUser({ auth: true, name: '' /* You can set the user name if available */ });
+      setUser({ auth: true, name: ''});
     } else {
       // If token is not present, reset axios headers and update user authentication
       delete axios.defaults.headers.common['Authorization'];
@@ -22,19 +22,19 @@ function App() {
     }
   }, []);
 
- 
-
-
   return (
     <BrowserRouter>
     <div className="App">
       <Switch>
-      { user.auth? <Route path = '/user:id/dashboard' render={() => <ProjectDashBoard setUser={setUser} />}/> : 
-      <Route path = '/' render={() => <Login setUser={setUser} />} exact/>}
-      {!user.auth && <Route path = '/' render={() => <Login setUser={setUser} />} exact/>}
+        {user.auth ? (
+          <Route path="/user:id/dashboard" render={() => <ProjectDashBoard setUser={setUser} />} />
+        ) : (
+          // Route for the login page, shown when user is not authenticated
+          <Route exact path="/" render={() => <Login setUser={setUser} />} />
+        )}
       </Switch>
     </div>
-    </BrowserRouter>
+  </BrowserRouter>
   );
 }
 export default App;
