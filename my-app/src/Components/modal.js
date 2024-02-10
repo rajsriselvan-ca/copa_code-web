@@ -160,44 +160,12 @@ function FormDetails(props) {
                                         }
                                     >
                                         {getCategory.map(record => (
-                                            <Option key={record.notes_type_id} value={record.notes_type_id}>{record.notes_type}</Option>
+                                            <Option key={parseInt(record.notes_type_id)} value={parseInt(record.notes_type_id)}>{record.notes_type}</Option>
                                         ))}
                                     </Select>
                                 </Form.Item>
                             </Col>
                         </Row>
-                        {
-                            editValue.program_id  !== 0 ? 
-                            <Row>
-                            <Form.Item
-                                name="Language"
-                                label="Language"
-                                rules={[
-                                    {
-                                        required: false,
-                                    },
-                                ]}
-                            >
-                                <Select
-                                    showSearch
-                                    style={{ width: 223 }}
-                                    placeholder="Select language"
-                                    optionFilterProp="children"
-                                    onChange={event => setSelectedProgram(event)}
-                                    onFocus={onFocus}
-                                    onBlur={onBlur}
-                                    // onSearch={onSearch}
-                                    filterOption={(input, option) =>
-                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                    }
-                                >
-                                    {getProgramType.map(record => (
-                                        <Option key={record.language_id} value={record.language_id}>{record.language_name}</Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-                        </Row> : <div/>
-                        }
                         <Form.Item
                             name="Content"
                             label="Content"
