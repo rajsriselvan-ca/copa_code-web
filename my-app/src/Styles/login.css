@@ -1,6 +1,6 @@
 @import '~antd/dist/antd.css';
 body {
-    background: linear-gradient(90deg, rgba(121,82,224,1) 0%, rgba(121,57,204,1) 35%, rgba(0,212,255,1) 100%);
+    background: radial-gradient( circle farthest-corner at -4.5% 34.3%,  rgba(13,20,174,1) 0%, rgba(243,165,140,1) 90% );
     height: 100vh;
 }
 
