@@ -24,17 +24,17 @@ function App() {
 
   return (
     <BrowserRouter>
-    <div className="App">
-      <Switch>
-        {user.auth ? (
-          <Route path="/user:id/dashboard" render={() => <ProjectDashBoard setUser={setUser} />} />
-        ) : (
-          // Route for the login page, shown when user is not authenticated
-          <Route exact path="/" render={() => <Login setUser={setUser} />} />
-        )}
-      </Switch>
-    </div>
-  </BrowserRouter>
+      <div className="App">
+        <Switch>
+          <Route exact path="/">
+            {user.auth ? <Redirect to={`/user/dashboard`} /> : <Login setUser={setUser} />}
+          </Route>
+          <Route path="/user/dashboard">
+            {user.auth ? <ProjectDashBoard setUser={setUser} /> : <Redirect to="/" />}
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
   );
 }
 export default App;

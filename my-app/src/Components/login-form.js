@@ -39,7 +39,7 @@ function Login({setUser}) {
                         localStorage.setItem('userID',userID);
                         localStorage.setItem('userName', userName.toLowerCase());
                         notificationContent("success", "Login");
-                        history.push(`user${userID}/dashboard`);
+                        history.push(`user/dashboard`);
                         }
                     });            
         }
