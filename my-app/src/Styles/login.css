@@ -46,6 +46,7 @@ body {
 }
 .register-back-button {
     margin-left: 70%;
+    margin-top: -7%;
     cursor: pointer;
 }
 .login-form-button:hover {
