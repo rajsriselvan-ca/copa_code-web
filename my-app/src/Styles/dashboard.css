@@ -42,7 +42,7 @@
 }
 .ant-menu.ant-menu-dark .ant-menu-item-selected, 
 .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
-  background-color: #26afeb;
+  background-color: rgba(141,26,78,1);
 }
 .ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover {
   background-color: #d6d6d6;
@@ -102,7 +102,7 @@
   background-color: #001529;
 }
 .add-button {
-    background-color: #26afeb;
+    background-color: rgba(141,26,78,1);
     border-color: #26afeb;
     margin-left: 1%;
 }
@@ -168,4 +168,52 @@
   left: 6px;
   bottom: 4px;
   cursor: pointer;
+}
+.slate-board {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  overflow: scroll;
+  overflow-x: hidden;
+  height: 77vh;
+}
+
+.cards-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 576px) {
+  .cards-container {
+    width: calc(50% - 20px);
+  }
+}
+
+@media (min-width: 768px) {
+  .cards-container {
+    width: calc(33.3333% - 20px);
+  }
+}
+
+@media (min-width: 992px) {
+  .cards-container {
+    width: calc(25% - 20px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .cards-container {
+    width: calc(20% - 20px);
+  }
+}
+.cards {
+  height: 100%;
+}
+.no-data-message {
+  position: relative;
+  left: 46%;
+}
+.formatedDate-card {
+  font-size: 10px;
+  position:relative; float: left; bottom:-40px; left: 4px;
 }
