@@ -13,9 +13,40 @@ import axios from 'axios'
 const { Header, Content } = Layout;
 const { Search } = Input;
 
+const courseList = [
+    {
+        notes_type: "Advanced Programming",
+        notes_type_id: "1"
+    },
+    {
+        notes_type: "Cloud Computing",
+        notes_type_id: "2"
+    },
+    {
+        notes_type: "Web Design",
+        notes_type_id: "3"
+    },
+    {
+        notes_type: "Enterprise Systems",
+        notes_type_id: "4"
+    },
+    {
+        notes_type: "Applied Systems",
+        notes_type_id: "5"
+    },
+    {
+        notes_type: "Business Data",
+        notes_type_id: "6"
+    },
+    {
+        notes_type: "Personal Notes",
+        notes_type_id: "7"
+    },
+];
+
 function ProjectDashBoard({ setUser }) {
     let history = useHistory();
-    const [getNotesCategory, setNotesCategory] = useState([]);
+    // const [getNotesCategory, setNotesCategory] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isSessionModalVisible, setSessionModalVisible] = useState(false);
     const [selectedTab, setSelectedTab] = useState('1');
@@ -29,6 +60,8 @@ function ProjectDashBoard({ setUser }) {
     const [showLoader, setLoader] = useState(true);
 
     const fetchData = async () => {
+        // console.log("debug--->>",getNotesCategory )
+       
         try {
             const params = {
                 user_id: localStorage.getItem('userID'),
@@ -36,7 +69,7 @@ function ProjectDashBoard({ setUser }) {
             }
             setUserName(localStorage.getItem('userName'))
             const incomingNotesType = await getNotesType();
-            setNotesCategory(incomingNotesType.data);
+            // setNotesCategory(incomingNotesType.data);
             const incomingNotes = await getNotes(params);
             setNoteList(incomingNotes.data)
             const incomingEntireNotes = await getAllNotes(params);
@@ -72,6 +105,18 @@ function ProjectDashBoard({ setUser }) {
         }
     }
 
+    const formatDate = (dateString) => {
+        const [datePart, timePart] = dateString.split(' ');
+        const [day, month, year] = datePart.split('-').map(part => parseInt(part, 10));
+        const [hour, minute] = timePart.split(':').map(part => parseInt(part, 10));
+        const formattedMonth = new Date(year, month - 1, day).toLocaleString('default', { month: 'short' });
+      
+        const formattedDate = `${formattedMonth} ${day}/${year.toString().slice(-2)}`;
+        const formattedTime = `${hour % 12 || 12}:${minute.toString().padStart(2, '0')} ${hour < 12 ? 'am' : 'pm'}`;
+      
+        return `${formattedDate} ${formattedTime}`;
+      };
+
     let handleTabSelection = async (key) => {
         setLoader(true);
         try {
@@ -83,6 +128,7 @@ function ProjectDashBoard({ setUser }) {
             const incomingNotes = await getNotes(params);
             setSelectedTab(key.toString());
             setNoteList(incomingNotes.data);
+            console.log("pp----", incomingNotes.data)
             setLoader(false);
         } catch (error) {
             setSessionModalVisible(true); // handling session time out error
@@ -152,7 +198,7 @@ function ProjectDashBoard({ setUser }) {
                     <div className='logout-outer'><div className='logout-inner' onClick={logoutHandler}>Logout</div></div>
                 </div>
                 {<Menu theme="dark" color="red" mode="horizontal" selectedKeys={[selectedTab]}>
-                    {getNotesCategory.map((data) => (
+                    {courseList.map((data) => (
                         <Menu.Item key={data.notes_type_id} onClick={event => handleTabSelection(event.key)}>{data.notes_type}</Menu.Item>
                     ))}
                 </Menu>}
@@ -174,6 +220,7 @@ function ProjectDashBoard({ setUser }) {
                                     <div><span>{showIcon}</span>
                                         <span className="title-frame"><p><b>{record.note_title}</b></p></span></div>
                                     <div className="description-frame"><p className="card-description">{record.content}</p></div>
+                                    <div className='formatedDate-card'>{formatDate(record.submission_date)}</div>
                                 </Card>
                                 <div className="delete-component" onClick={event => handleDelete(record)}><i className="bi bi bi-trash"></i></div>
                             </div>
@@ -183,6 +230,7 @@ function ProjectDashBoard({ setUser }) {
                                     <div><span>{showIcon}</span>
                                         <span className="title-frame"><p><b>{record.note_title}</b></p></span></div>
                                     <div className="description-frame"><p className="card-description">{record.content}</p></div>
+                                    <div className='formatedDate-card'>{formatDate(record.submission_date)}</div>
                                 </Card>
                                 <div className="delete-component" onClick={event => handleDelete(record)}><i className="bi bi bi-trash"></i></div>
                             </div>
@@ -193,7 +241,7 @@ function ProjectDashBoard({ setUser }) {
             </Content>
             {isSessionModalVisible && <SessionModal setUser={setUser} history={history} visiblity={isSessionModalVisible} />}
             {isModalVisible && <FormDetails selectedTab={selectedTab} setEntireNotesList={setEntireNotesList} handleTabSelection={handleTabSelection} setSessionModalVisible={setSessionModalVisible} visiblity={isModalVisible} gridData={fetchData} edit={editContent} cancel={onCancel} />}
-            <a className="footer" target='_blank' href='http://www.linkedin.com/in/rajsriselvan'><small>Developed by Raj Sri Selvan</small></a>
+            <a className="footer" target='_blank' ><small>2024 Copyright: University of Galway Notes</small></a>
         </Layout>
     )
 }

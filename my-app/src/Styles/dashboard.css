@@ -39,7 +39,7 @@
 }
 .ant-menu.ant-menu-dark .ant-menu-item-selected, 
 .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
-  background-color: #26afeb;
+  background-color: rgba(141,26,78,1);
 }
 .ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover {
   background-color: #d6d6d6;
@@ -95,7 +95,7 @@
   background-color: #001529;
 }
 .add-button {
-    background-color: #26afeb;
+    background-color: rgba(141,26,78,1);
     border-color: #26afeb;
     margin-left: 1%;
 }
@@ -205,4 +205,8 @@
 .no-data-message {
   position: relative;
   left: 46%;
+}
+.formatedDate-card {
+  font-size: 10px;
+  position:relative; float: left; bottom:-40px; left: 4px;
 }

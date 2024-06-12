@@ -8,10 +8,41 @@ import { notificationContent } from "../Shared Files/notification";
 const { Option } = Select;
 const { TextArea } = Input;
 
+const courseList = [
+    {
+        notes_type: "Advance Programming",
+        notes_type_id: "1"
+    },
+    {
+        notes_type: "Cloud Computing",
+        notes_type_id: "2"
+    },
+    {
+        notes_type: "Web Design",
+        notes_type_id: "3"
+    },
+    {
+        notes_type: "Enterprise Systems",
+        notes_type_id: "4"
+    },
+    {
+        notes_type: "Applied Systems",
+        notes_type_id: "5"
+    },
+    {
+        notes_type: "Business Data",
+        notes_type_id: "6"
+    },
+    {
+        notes_type: "Personal Notes",
+        notes_type_id: "7"
+    },
+];
+
 function FormDetails(props) {
     const [form] = Form.useForm();
     const [editForm, setEditForm] = useState(false);
-    const [getCategory, setCategory] = useState([]);
+    // const [getCategory, setCategory] = useState([]);
     const [selectedTitle, setSelectedTitle] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState([]);
     const [selectedProgram, setSelectedProgram] = useState(0);
@@ -23,7 +54,7 @@ function FormDetails(props) {
         const fetchData = async () => {
             const incomingCategory = await getNotesType();
                 const incomingLanguage = await getProgramLanguage();
-                setCategory(incomingCategory.data);
+                // setCategory(incomingCategory.data);
             const checkEditValue = editValue.hasOwnProperty('note_id');
             if(checkEditValue) {
                 setSelectedTitle(editValue.note_title);
@@ -170,7 +201,7 @@ function FormDetails(props) {
                                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                         }
                                     >
-                                        {getCategory.map(record => (
+                                        {courseList.map(record => (
                                             <Option key={parseInt(record.notes_type_id)} value={parseInt(record.notes_type_id)}>{record.notes_type}</Option>
                                         ))}
                                     </Select>

@@ -76,7 +76,7 @@ function Login({setUser}) {
                             remember: true,
                         }}
                     >
-                        <img src="../app-logo.png" width="350" height="75"/>
+                        <img className='login-logo' src="../UOGNotes.png" width="300" height="100"/>
                         <div className="inner-box">
                             <span className="login-header">{formType !== "User-Login" ? <b>Registration</b> : <b>Login</b>}</span>
                             <div>
