@@ -143,6 +143,17 @@ function ProjectDashBoard({ setUser }) {
         history.push('/');
     }
 
+    const formatDate = (dateString) => {
+        const [datePart, timePart] = dateString.split(' ');
+        const [day, month, year] = datePart.split('-').map(part => parseInt(part, 10));
+        const [hour, minute] = timePart.split(':').map(part => parseInt(part, 10));
+        const formattedMonth = new Date(year, month - 1, day).toLocaleString('default', { month: 'short' });
+
+        const formattedDate = `${formattedMonth} ${day}/${year.toString().slice(-2)}`;
+        const formattedTime = `${hour % 12 || 12}:${minute.toString().padStart(2, '0')} ${hour < 12 ? 'am' : 'pm'}`;
+        return `${formattedDate} ${formattedTime}`;
+      };
+
     return (
         <Layout className="dashboard-container">
             <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
@@ -174,6 +185,7 @@ function ProjectDashBoard({ setUser }) {
                                     <div><span>{showIcon}</span>
                                         <span className="title-frame"><p><b>{record.note_title}</b></p></span></div>
                                     <div className="description-frame"><p className="card-description">{record.content}</p></div>
+                                    <div className='formatedDate-card'>{formatDate(record.submission_date)}</div>
                                 </Card>
                                 <div className="delete-component" onClick={event => handleDelete(record)}><i className="bi bi bi-trash"></i></div>
                             </div>
@@ -183,6 +195,7 @@ function ProjectDashBoard({ setUser }) {
                                     <div><span>{showIcon}</span>
                                         <span className="title-frame"><p><b>{record.note_title}</b></p></span></div>
                                     <div className="description-frame"><p className="card-description">{record.content}</p></div>
+                                    <div className='formatedDate-card'>{formatDate(record.submission_date)}</div>
                                 </Card>
                                 <div className="delete-component" onClick={event => handleDelete(record)}><i className="bi bi bi-trash"></i></div>
                             </div>

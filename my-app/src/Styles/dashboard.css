@@ -206,3 +206,7 @@
   position: relative;
   left: 46%;
 }
+.formatedDate-card {
+  font-size: 10px;
+  position:relative; float: left; bottom:-40px; left: 4px;
+}
