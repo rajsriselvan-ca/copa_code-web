@@ -1,72 +1,83 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button, Card } from 'antd';
+import { DotLoader } from 'react-spinners'; 
 import { useHistory } from "react-router-dom";
 import { MailOutlined, LockOutlined, RightCircleFilled, LeftCircleFilled } from '@ant-design/icons';
 import '../Styles/login.css';
 import { registerLogin, loginUserDetails } from '../Api/login';
 import moment from "moment";
 import { notificationContent } from '../Shared Files/notification';
-import axios from 'axios'
+import axios from 'axios';
 
-function Login({setUser}) {
+function Login({ setUser }) {
     let history = useHistory();
     const [registerUser, setRegisterUser] = useState();
     const [registerPassword, setRegisterPassword] = useState();
     const [formType, setFormType] = useState("User-Login");
     const [loginButtonDisable, setloginButtonDisable] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); 
     const [form] = Form.useForm();
 
     const onFinish = () => {
+        setIsLoading(true); 
         if (formType === "User-Login") {
-                setloginButtonDisable(true);
-                const LoginUserDetailsPayload = {
-                    username : registerUser.toLowerCase(),
-                    password : registerPassword
+            setloginButtonDisable(true);
+            const LoginUserDetailsPayload = {
+                username: registerUser.toLowerCase(),
+                password: registerPassword
+            };
+            loginUserDetails(LoginUserDetailsPayload).then((response) => {
+                const getAccess = response.data;
+                if (getAccess === "User Not Exist") {
+                    setloginButtonDisable(false);
+                    notificationContent("error", "Login");
+                } else {
+                    const getSessionDetails = response.data;
+                    const token = getSessionDetails["token"];
+                    const userID = getSessionDetails["userDetails"]["user_id"];
+                    const userName = getSessionDetails["userDetails"]["user_name"];
+                    localStorage.setItem('jwtToken', token);
+                    axios.defaults.headers.common['Authorization'] = token;
+                    setUser({ auth: true, name: userName });
+                    localStorage.setItem('userID', userID);
+                    localStorage.setItem('userName', userName.toLowerCase());
+                    notificationContent("success", "Login");
+                    history.push(`user/dashboard`);
                 }
-                    loginUserDetails(LoginUserDetailsPayload).then((response) => {
-                        const getAccess = response.data;
-                        if (getAccess == "User Not Exist") {
-                        setloginButtonDisable(false);
-                        notificationContent("error", "Login");
-                        } else {
-                        const getSessionDetails = response.data;
-                        const token = getSessionDetails["token"];
-                        const userID = getSessionDetails["userDetails"]["user_id"];
-                        const userName = getSessionDetails["userDetails"]["user_name"];
-                        localStorage.setItem('jwtToken', token)
-                        axios.defaults.headers.common['Authorization'] = token;
-                        setUser({ auth:true, name: userName })
-                        localStorage.setItem('userID',userID);
-                        localStorage.setItem('userName', userName.toLowerCase());
-                        notificationContent("success", "Login");
-                        history.push(`user/dashboard`);
-                        }
-                    });            
-        }
-        else if (formType === "User-Registration") {
+            }).finally(() => {
+                setIsLoading(false);
+            });
+        } else if (formType === "User-Registration") {
             const currentDate = moment().format("DD-MM-YYYY hh:mm A");
             const registerPayload = {
-                        username: registerUser.toLowerCase(),
-                        password: registerPassword,
-                        submission_date: currentDate
-                    };
-                registerLogin(registerPayload).then((response) => {
-                            const status = response.data;
-                            if (status === "success") {
-                            setFormType("User-Login");
-                            notificationContent(status, "Registration");
-                            } else {
-                                notificationContent(status, "Registration");
-                            }
-                        });
+                username: registerUser.toLowerCase(),
+                password: registerPassword,
+                submission_date: currentDate
+            };
+            registerLogin(registerPayload).then((response) => {
+                const status = response.data;
+                if (status === "success") {
+                    setFormType("User-Login");
+                    notificationContent(status, "Registration");
+                } else {
+                    notificationContent(status, "Registration");
+                }
+            }).finally(() => {
+                setIsLoading(false); 
+            });
             form.resetFields();
         }
     };
     return (
         <div className="login-outline">
-            <div className='login-background'>
-                <Card size="small" className="login-frame"
-                    style={{ width: 400, height: 392 }}>
+        {isLoading && (
+            <div className="loader-container">
+                <DotLoader size={80} color={"#1890ff"} />  
+                <div className="loader-message">Please Wait</div>
+            </div>
+        )}
+        <div className='login-background'>
+                <Card size="small" className="login-frame" style={{ width: 400, height: 392 }}>
                     <Form
                         name="normal_login"
                         className="login-form"
@@ -76,7 +87,7 @@ function Login({setUser}) {
                             remember: true,
                         }}
                     >
-                        <img src="../app-logo.png" width="350" height="75"/>
+                        <img src="../app-logo.png" width="350" height="75" alt="App Logo" />
                         <div className="inner-box">
                             <span className="login-header">{formType !== "User-Login" ? <b>Registration</b> : <b>Login</b>}</span>
                             <div>
@@ -90,7 +101,14 @@ function Login({setUser}) {
                                         },
                                     ]}
                                 >
-                                    <Input className="email-field" onChange={(event) => setRegisterUser(event.target.value)} size="large" prefix={<MailOutlined style={{ fontSize: '20px' }} className="site-form-item-icon" />} placeholder="Email" />
+                                    <Input
+                                        className="email-field"
+                                        onChange={(event) => setRegisterUser(event.target.value)}
+                                        size="large"
+                                        prefix={<MailOutlined style={{ fontSize: '20px' }} className="site-form-item-icon" />}
+                                        placeholder="Email"
+                                        disabled={isLoading} 
+                                    />
                                 </Form.Item>
                                 <Form.Item
                                     name="password"
@@ -115,20 +133,30 @@ function Login({setUser}) {
                                         prefix={<LockOutlined style={{ fontSize: '20px' }} className="site-form-item-icon" />}
                                         type="password"
                                         placeholder="Password"
+                                        disabled={isLoading} 
                                     />
                                 </Form.Item>
                                 <Form.Item>
-                                    <Button type="primary" disabled={loginButtonDisable} htmlType="submit" className="login-form-button" >
+                                    <Button
+                                        type="primary"
+                                        disabled={loginButtonDisable || isLoading} 
+                                        htmlType="submit"
+                                        className="login-form-button"
+                                    >
                                         {formType !== "User-Login" ? "Register" : "Login"}
                                     </Button>
                                 </Form.Item>
-                                <div>{formType === "User-Login" ? (<div className='new-user-question' onClick={(event) => {
-                                        setFormType("User-Registration");
-                                    }} >Are you a new user ? Please register here {<RightCircleFilled
-                                     style={{ color: "#808080", fontSize: "16px", cursor: "pointer" }} />}</div>) :
-                                    (<div className="register-back-button" onClick={event => setFormType("User-Login")}>
-                                        <LeftCircleFilled style={{ color: "#808080", fontSize: "20px", marginTop: "20px" }} />
-                                        <span style={{ color: "#636f80", fontSize: "18px" }}><span className="go-back"> Go Back</span></span></div>)}
+                                <div>
+                                    {formType === "User-Login" ? (
+                                        <div className='new-user-question' onClick={() => setFormType("User-Registration")}>
+                                            Are you a new user? Please register here {<RightCircleFilled style={{ color: "#808080", fontSize: "16px", cursor: "pointer" }} />}
+                                        </div>
+                                    ) : (
+                                        <div className="register-back-button" onClick={() => setFormType("User-Login")}>
+                                            <LeftCircleFilled style={{ color: "#808080", fontSize: "20px", marginTop: "20px" }} />
+                                            <span style={{ color: "#636f80", fontSize: "18px" }}><span className="go-back"> Go Back</span></span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

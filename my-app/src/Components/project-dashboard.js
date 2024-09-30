@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Layout, Menu, Card, Input, Button, Empty, Spin } from 'antd';
+import { Layout, Menu, Card, Input, Button, Empty, Spin, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useHistory } from "react-router-dom";
 import { notificationContent } from "../Shared Files/notification";
@@ -106,23 +106,33 @@ function ProjectDashBoard({ setUser }) {
     }
 
     const handleDelete = async (record) => {
-        setLoader(true);
-        try {
-            const id = record.note_id;
-            await deleteNote(id).then(response => {
-                if (response.data == "success") {
-                    notificationContent(response.data, "deleteConfirmation");
-                    setLoader(false);
-                } 
-                else {
-                    return notificationContent(response.data, "deleteConfirmation");
+        Modal.confirm({
+            title: 'Are you sure you want to delete this note?',
+            content: 'This action cannot be undone.',
+            okText: 'Yes, Delete',
+            cancelText: 'Cancel',
+            onOk: async () => {
+                setLoader(true);
+                try {
+                    const id = record.note_id;
+                    await deleteNote(id).then(response => {
+                        if (response.data === "success") {
+                            notificationContent(response.data, "deleteConfirmation");
+                            setLoader(false);
+                        } else {
+                            return notificationContent(response.data, "deleteConfirmation");
+                        }
+                    });
+                } catch (error) {
+                    setSessionModalVisible(true);
                 }
-            });
-        } catch (error) {
-            setSessionModalVisible(true);
-        }
-        fetchData();
-    }
+                fetchData();
+            },
+            onCancel() {
+                console.log('Deletion canceled');
+            }
+        });
+    };
 
     const searchHandler = (value) => {
         setSearchTerm(value);
@@ -206,7 +216,7 @@ function ProjectDashBoard({ setUser }) {
             </Content>
             {isSessionModalVisible && <SessionModal setUser={setUser} history={history} visiblity={isSessionModalVisible} />}
             {isModalVisible && <FormDetails selectedTab={selectedTab} setEntireNotesList={setEntireNotesList} handleTabSelection={handleTabSelection} setSessionModalVisible={setSessionModalVisible} visiblity={isModalVisible} gridData={fetchData} edit={editContent} cancel={onCancel} />}
-            <a className="footer" target='_blank' href='http://www.linkedin.com/in/rajsriselvan'><small>Developed by Raj Sri Selvan</small></a>
+            <a className="footer" target='_blank' href='https://rajsriselvan-portfolio.vercel.app/'><small>Developed by Raj Sri Selvan</small></a>
         </Layout>
     )
 }
